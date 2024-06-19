@@ -19,20 +19,17 @@
     left: 50%;
     width:  $item-size;
     height: $item-size;
-    margin: -($item-size / 2);
+    margin: calc(-#{$item-size} / 2);
   
-    $angle: (360 / $item-count);
-    $rot: 0;
+    $angle: calc(360deg / #{$item-count});
 
     @for $i from 1 through $item-count {
       &:nth-of-type(#{$i}) {
         transform: 
-          rotate($rot * 1deg) 
-          translate($circle-size / 2) 
-          rotate($rot * -1deg);
+          rotate(calc(#{$angle} * #{$i - 1})) 
+          translate(calc(#{$circle-size} / 2)) 
+          rotate(calc(-#{$angle} * #{$i - 1}));
       }
-
-      $rot: $rot + $angle;
     }
   }
 }

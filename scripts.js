@@ -5,17 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
     updateBACBar();
 });
 
-function initializeClock() {
-    const clock = document.getElementById('clock');
-    for (let i = 1; i <= 12; i++) {
-        const number = document.createElement('div');
-        number.className = 'clock-number';
-        number.innerText = i;
-        number.style.transform = `rotate(${i * 30}deg) translate(120px) rotate(-${i * 30}deg)`;
-        number.onclick = () => openDrinkPopup(i);
-        clock.appendChild(number);
-    }
-}
+// function initializeClock() {
+//     const clock = document.getElementById('clock');
+//     for (let i = 1; i <= 12; i++) {
+//         const number = document.createElement('div');
+//         number.className = 'clock-number';
+//         number.innerText = i;
+//         number.style.transform = `rotate(${i * 30}deg) translate(120px) rotate(-${i * 30}deg)`;
+//         number.onclick = () => openDrinkPopup(i);
+//         clock.appendChild(number);
+//     }
+// }
 
 function openUserInfoPopup() {
     // Show user info popup
