@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function openUserInfoPopup() {
     // Show user info popup
+    const popup = document.getElementById('user-info-popup');
+    popup.classList.add('active');
 }
 
 function openDrinkPopup(hour) {
