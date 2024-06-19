@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("hello");
     loadUserData();
     loadDrinkData();
     updateBACBar();
+    loadDrinkOptions();
+    console.log("hello");
 });
 
 function openUserInfoPopup() {
@@ -57,23 +60,23 @@ function calculateBAC() {
     // Return the calculated BAC value
 }
 
-function updateBACBar() {
-    const bac = calculateBAC();
-    const bacBar = document.getElementById('bac-bar');
-    if (bac <= 0.5) {
-        bacBar.style.backgroundColor = 'green';
-    } else if (bac <= 1) {
-        bacBar.style.backgroundColor = 'yellow';
-    } else if (bac <= 1.5) {
-        bacBar.style.backgroundColor = 'darkyellow';
-    } else if (bac <= 2.5) {
-        bacBar.style.backgroundColor = 'orange';
-    } else if (bac <= 3) {
-        bacBar.style.backgroundColor = 'lightred';
-    } else {
-        bacBar.style.backgroundColor = 'darkred';
-    }
-}
+// function updateBACBar() {
+//     const bac = calculateBAC();
+//     const bacBar = document.getElementById('bac-bar');
+//     if (bac <= 0.5) {
+//         bacBar.style.backgroundColor = 'green';
+//     } else if (bac <= 1) {
+//         bacBar.style.backgroundColor = 'yellow';
+//     } else if (bac <= 1.5) {
+//         bacBar.style.backgroundColor = 'darkyellow';
+//     } else if (bac <= 2.5) {
+//         bacBar.style.backgroundColor = 'orange';
+//     } else if (bac <= 3) {
+//         bacBar.style.backgroundColor = 'lightred';
+//     } else {
+//         bacBar.style.backgroundColor = 'darkred';
+//     }
+// }
 
 function clearCookie() {
     document.cookie = "userData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -147,12 +150,25 @@ function updateUserInfoDisplay() {
 
 function updateClockDisplay() {
     const drinkData = getCookie('drinkData');
+    const tableBody = document.querySelector('#drinks-table tbody');
+    tableBody.innerHTML = ''; // Clear existing rows
+
     if (drinkData) {
         const data = JSON.parse(drinkData);
         for (const hour in data) {
             const drinks = data[hour];
-            const numberElement = document.querySelector(`.clock-number:nth-child(${hour})`);
-            numberElement.innerHTML = `${hour}<br>${drinks.map(d => d.drinkType === 'beer' ? '🍺' : '🍷').join('')}`;
+            drinks.forEach(drink => {
+                const row = document.createElement('tr');
+                const timeCell = document.createElement('td');
+                const typeCell = document.createElement('td');
+
+                timeCell.textContent = hour;
+                typeCell.textContent = drink.drinkType;
+
+                row.appendChild(timeCell);
+                row.appendChild(typeCell);
+                tableBody.appendChild(row);
+            });
         }
     }
 }
@@ -182,26 +198,54 @@ function calculateBAC() {
     return bac;
 }
 
-function updateBACBar() {
-    const bac = calculateBAC();
-    const bacBar = document.getElementById('bac-bar');
-    if (bac <= 0.5) {
-        bacBar.style.backgroundColor = 'green';
-    } else if (bac <= 1) {
-        bacBar.style.backgroundColor = 'yellow';
-    } else if (bac <= 1.5) {
-        bacBar.style.backgroundColor = 'darkyellow';
-    } else if (bac <= 2.5) {
-        bacBar.style.backgroundColor = 'orange';
-    } else if (bac <= 3) {
-        bacBar.style.backgroundColor = 'lightred';
-    } else {
-        bacBar.style.backgroundColor = 'darkred';
-    }
-}
-
 function clearCookie() {
     document.cookie = "userData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "drinkData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     location.reload();
 }
+
+function selectDrink(drinkType) {
+    saveDrink(selectedHour, drinkType, 1); // Assuming quantity is 1 for each click
+    closePopup('drink-popup');
+}
+
+
+async function loadDrinkOptions() {
+    try {
+        console.log('Loading drink options...');
+        const response = await fetch('drinks.json');
+        console.log('Response:', response);
+        const drinks = await response.json();
+        console.log('Drinks:', drinks);
+
+        const drinkPopup = document.getElementById('drink-popup');
+        console.log('Drink Popup:', drinkPopup);
+        drinks.forEach(drink => {
+            const drinkButton = document.createElement('button');
+            drinkButton.textContent = drink.name;
+            drinkButton.addEventListener('click', () => selectDrink(drink.name));
+            drinkPopup.insertBefore(drinkButton, drinkPopup.lastElementChild);
+            console.log('Added drink button:', drinkButton);
+        });
+    } catch (error) {
+        console.error('Error loading drink options:', error);
+    }
+}
+
+// function updateBACBar() {
+//     const bac = calculateBAC();
+//     const bacBar = document.getElementById('bac-bar');
+//     if (bac <= 0.5) {
+//         bacBar.style.backgroundColor = 'green';
+//     } else if (bac <= 1) {
+//         bacBar.style.backgroundColor = 'yellow';
+//     } else if (bac <= 1.5) {
+//         bacBar.style.backgroundColor = 'darkyellow';
+//     } else if (bac <= 2.5) {
+//         bacBar.style.backgroundColor = 'orange';
+//     } else if (bac <= 3) {
+//         bacBar.style.backgroundColor = 'lightred';
+//     } else {
+//         bacBar.style.backgroundColor = 'darkred';
+//     }
+// }

@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Bier",
+        "percentAlcohol": 5,
+        "imageUrl": "path/to/bier.png",
+        "volume": 500
+    },
+    {
+        "name": "Wein",
+        "percentAlcohol": 12,
+        "imageUrl": "path/to/wein.png",
+        "volume": 200
+    },
+    {
+        "name": "Schnaps",
+        "percentAlcohol": 40,
+        "imageUrl": "path/to/schnaps.png",
+        "volume": 40
+    }
+]
