@@ -74,7 +74,7 @@ body {
   --nth-child: 12 ;
 }
 
-.hour {
+.clock-number {
   left: 45%;
   top: 45%;
   position: absolute;

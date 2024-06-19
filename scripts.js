@@ -1,21 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    initializeClock();
     loadUserData();
     loadDrinkData();
     updateBACBar();
 });
-
-// function initializeClock() {
-//     const clock = document.getElementById('clock');
-//     for (let i = 1; i <= 12; i++) {
-//         const number = document.createElement('div');
-//         number.className = 'clock-number';
-//         number.innerText = i;
-//         number.style.transform = `rotate(${i * 30}deg) translate(120px) rotate(-${i * 30}deg)`;
-//         number.onclick = () => openDrinkPopup(i);
-//         clock.appendChild(number);
-//     }
-// }
 
 function openUserInfoPopup() {
     // Show user info popup
@@ -23,9 +10,7 @@ function openUserInfoPopup() {
     popup.classList.add('active');
 }
 
-function openDrinkPopup(hour) {
-    // Show drink selection popup for the specified hour
-}
+
 
 function loadUserData() {
     // Load user data from cookie
@@ -48,11 +33,7 @@ function openUserInfoPopup() {
     popup.classList.add('active');
 }
 
-function openDrinkPopup(hour) {
-    const popup = document.getElementById('drink-popup');
-    popup.classList.add('active');
-    // Store the selected hour in a global variable or data attribute
-}
+
 
 function closePopup(popupId) {
     const popup = document.getElementById(popupId);
