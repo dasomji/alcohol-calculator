@@ -112,26 +112,46 @@ body {
 .popup.active {
   display: block;
   width: 300px;
-  height: 300px;
+  height: auto;
+}
+
+#drinks-container {
+    display: flex;
+    max-width: 100%;
+    flex-flow: row wrap;
+    gap: 10px;
+    justify-content: center;
 }
 
 .drink-option {
-    width: 100px;
-    height: 100px;
+    width: 30%;
+    height: auto;
     display: flex;
+    flex-flow: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
-    margin: 10px;
     cursor: pointer;
     background-size: cover;
     background-position: center;
+    border: 1px solid black;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-.drinks-container {
+
+.drink-option img{
+    width: 100%;
+    height: auto;
+}
+
+.drink-info {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-flow: column;
+    align-items: center;
+    gap: 4px;
 }
 
+.drink-info p {
+    margin: 0;
+}
 /*# sourceMappingURL=styles.css.map */

@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("hello");
     loadUserData();
     loadDrinkData();
     updateBACBar();
     loadDrinkOptions();
-    console.log("hello");
 });
 
 function openUserInfoPopup() {
@@ -49,9 +47,16 @@ function saveUserInfo() {
     updateBACBar();
 }
 
-function saveDrink(hour, drinkType, quantity) {
-    // Save drink data to cookie
+function saveDrink(hour, drinkType, percentAlcohol, quantity) {
+    let drinkData = getCookie('drinkData');
+    drinkData = drinkData ? JSON.parse(drinkData) : {};
+    if (!drinkData[hour]) {
+        drinkData[hour] = [];
+    }
+    drinkData[hour].push({ drinkType, percentAlcohol, quantity });
+    document.cookie = `drinkData=${JSON.stringify(drinkData)}; path=/;`;
     closePopup('drink-popup');
+    updateClockDisplay();
     updateBACBar();
 }
 
@@ -103,13 +108,13 @@ function saveUserInfo() {
     updateBACBar();
 }
 
-function saveDrink(hour, drinkType, quantity) {
+function saveDrink(hour, drinkType, percentAlcohol, quantity) {
     let drinkData = getCookie('drinkData');
     drinkData = drinkData ? JSON.parse(drinkData) : {};
     if (!drinkData[hour]) {
         drinkData[hour] = [];
     }
-    drinkData[hour].push({ drinkType, quantity });
+    drinkData[hour].push({ drinkType, percentAlcohol, quantity });
     document.cookie = `drinkData=${JSON.stringify(drinkData)}; path=/;`;
     closePopup('drink-popup');
     updateClockDisplay();
@@ -161,12 +166,21 @@ function updateClockDisplay() {
                 const row = document.createElement('tr');
                 const timeCell = document.createElement('td');
                 const typeCell = document.createElement('td');
+                const percentCell = document.createElement('td');
+                const volumeCell = document.createElement('td');
 
-                timeCell.textContent = hour;
+                // Format the hour to display as "9:00" or "8:00"
+                const formattedHour = `${hour}:00`;
+
+                timeCell.textContent = formattedHour;
                 typeCell.textContent = drink.drinkType;
+                percentCell.textContent = drink.percentAlcohol; // Assuming percentAlcohol is stored in drink data
+                volumeCell.textContent = drink.quantity; // Assuming quantity is the volume in ml
 
                 row.appendChild(timeCell);
                 row.appendChild(typeCell);
+                row.appendChild(percentCell);
+                row.appendChild(volumeCell);
                 tableBody.appendChild(row);
             });
         }
@@ -204,28 +218,41 @@ function clearCookie() {
     location.reload();
 }
 
-function selectDrink(drinkType) {
-    saveDrink(selectedHour, drinkType, 1); // Assuming quantity is 1 for each click
+function selectDrink(drink) {
+    saveDrink(selectedHour, drink.name, drink.percentAlcohol, drink.volume);
     closePopup('drink-popup');
 }
 
 
 async function loadDrinkOptions() {
     try {
-        console.log('Loading drink options...');
         const response = await fetch('drinks.json');
-        console.log('Response:', response);
         const drinks = await response.json();
-        console.log('Drinks:', drinks);
 
-        const drinkPopup = document.getElementById('drink-popup');
-        console.log('Drink Popup:', drinkPopup);
+        const drinkPopup = document.getElementById('drinks-container');
         drinks.forEach(drink => {
-            const drinkButton = document.createElement('button');
-            drinkButton.textContent = drink.name;
-            drinkButton.addEventListener('click', () => selectDrink(drink.name));
-            drinkPopup.insertBefore(drinkButton, drinkPopup.lastElementChild);
-            console.log('Added drink button:', drinkButton);
+            const drinkDiv = document.createElement('div');
+            drinkDiv.classList.add('drink-option');
+            drinkDiv.addEventListener('click', () => selectDrink(drink));
+
+            const drinkImage = document.createElement('img');
+            drinkImage.src = drink.imageUrl;
+            drinkImage.alt = drink.name;
+
+            const drinkInfoDiv = document.createElement('div');
+            drinkInfoDiv.classList.add('drink-info');
+            const drinkName = document.createElement('p');
+            drinkName.textContent = drink.name;
+            const drinkDetails = document.createElement('p');
+            drinkDetails.textContent = `${drink.percentAlcohol}%, ${drink.volume}ml`;
+
+            drinkInfoDiv.appendChild(drinkName);
+            drinkInfoDiv.appendChild(drinkDetails);
+
+            drinkDiv.appendChild(drinkImage);
+            drinkDiv.appendChild(drinkInfoDiv);
+
+            drinkPopup.insertBefore(drinkDiv, drinkPopup.lastElementChild);
         });
     } catch (error) {
         console.error('Error loading drink options:', error);

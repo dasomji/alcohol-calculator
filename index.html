@@ -34,8 +34,10 @@
     <table id="drinks-table">
         <thead>
             <tr>
-                <th>Time it was drunk</th>
-                <th>Type of drink</th>
+                <th>Wann?</th>
+                <th>Getränk</th>
+                <th>%</th>
+                <th>ml</th>
             </tr>
         </thead>
         <tbody>
@@ -65,8 +67,10 @@
     </div>
         
     <div id="drink-popup" class="popup">
-        <h2>Add Drink</h2>
+        <h2>Getränk hinzufügen</h2>
+        <div id="drinks-container">
         <!-- Drink options will be dynamically loaded here -->
+        </div>
         <button type="button" onclick="closePopup('drink-popup')">Cancel</button>
     </div>
 

@@ -2,19 +2,43 @@
     {
         "name": "Bier",
         "percentAlcohol": 5,
-        "imageUrl": "path/to/bier.png",
+        "imageUrl": "images/drinks/bier.png",
         "volume": 500
     },
     {
         "name": "Wein",
         "percentAlcohol": 12,
-        "imageUrl": "path/to/wein.png",
+        "imageUrl": "images/drinks/wein.png",
         "volume": 200
     },
     {
-        "name": "Schnaps",
+        "name": "Shot",
         "percentAlcohol": 40,
-        "imageUrl": "path/to/schnaps.png",
+        "imageUrl": "images/drinks/shot.png",
         "volume": 40
+    },
+    {
+        "name": "Cocktail",
+        "percentAlcohol": 25,
+        "imageUrl": "images/drinks/cocktail.png",
+        "volume": 250
+    },
+    {
+        "name": "Radler",
+        "percentAlcohol": 2.5,
+        "imageUrl": "images/drinks/radler.png",
+        "volume": 500
+    },
+    {
+        "name": "Cola",
+        "percentAlcohol": 0,
+        "imageUrl": "images/drinks/cola.png",
+        "volume": 500
+    },
+    {
+        "name": "Wasser",
+        "percentAlcohol": 0,
+        "imageUrl": "images/drinks/wasser.png",
+        "volume": 500
     }
 ]
