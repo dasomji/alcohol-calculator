@@ -109,7 +109,7 @@ function updateClockDisplay() {
 
     if (drinkData) {
         const data = JSON.parse(drinkData);
-        const hours = [...Array(12).keys()].map(i => i + 7).concat([...Array(6).keys()].map(i => i + 1));
+        const hours = [...Array(24).keys()]; // Hours from 0 to 23
 
         hours.forEach(hour => {
             if (data[hour]) {
@@ -121,8 +121,8 @@ function updateClockDisplay() {
                     const percentCell = document.createElement('td');
                     const volumeCell = document.createElement('td');
 
-                    // Format the hour to display as "9:00" or "8:00"
-                    const formattedHour = `${hour}:00`;
+                    // Format the hour to display as "9:00" or "20:00"
+                    const formattedHour = `${hour.toString().padStart(2, '0')}:00`;
 
                     timeCell.textContent = formattedHour;
                     typeCell.textContent = drink.drinkType;
@@ -171,7 +171,7 @@ function calculateBAC() {
     console.log('Ratio (r):', r);
 
     const bacTable = [];
-    const hours = [...Array(24).keys()].map(i => (i + 19) % 24); // Hours from 7 PM to 6 PM
+    const hours = [...Array(24).keys()].map(i => (i + 18) % 24); // Hours from 7 PM to 6 PM
 
     hours.forEach(hour => {
         if (drinks[hour]) {
