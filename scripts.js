@@ -1,50 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("hello")
     loadUserData();
     loadDrinkData();
-    updateBACBar();
+    // updateBACBar();
     loadDrinkOptions();
 });
 
-function openUserInfoPopup() {
-    // Show user info popup
-    const popup = document.getElementById('user-info-popup');
-    popup.classList.add('active');
-}
-
-
-
-function loadUserData() {
-    // Load user data from cookie
-}
-
-function loadDrinkData() {
-    // Load drink data from cookie
-}
-
 function updateBACBar() {
-    // Calculate BAC and update the BAC bar color
-}
-
-function clearCookie() {
-    // Clear the cookie and reload the page
+    console.log("There is no bar yet")
 }
 
 function openUserInfoPopup() {
     const popup = document.getElementById('user-info-popup');
     popup.classList.add('active');
 }
-
-
 
 function closePopup(popupId) {
     const popup = document.getElementById(popupId);
     popup.classList.remove('active');
-}
-
-function saveUserInfo() {
-    // Save user info to cookie
-    closePopup('user-info-popup');
-    updateBACBar();
 }
 
 function saveDrink(hour, drinkType, percentAlcohol, quantity) {
@@ -58,30 +31,8 @@ function saveDrink(hour, drinkType, percentAlcohol, quantity) {
     closePopup('drink-popup');
     updateClockDisplay();
     updateBACBar();
+    calculateBAC();
 }
-
-function calculateBAC() {
-    // Implement the Widmark formula to calculate BAC
-    // Return the calculated BAC value
-}
-
-// function updateBACBar() {
-//     const bac = calculateBAC();
-//     const bacBar = document.getElementById('bac-bar');
-//     if (bac <= 0.5) {
-//         bacBar.style.backgroundColor = 'green';
-//     } else if (bac <= 1) {
-//         bacBar.style.backgroundColor = 'yellow';
-//     } else if (bac <= 1.5) {
-//         bacBar.style.backgroundColor = 'darkyellow';
-//     } else if (bac <= 2.5) {
-//         bacBar.style.backgroundColor = 'orange';
-//     } else if (bac <= 3) {
-//         bacBar.style.backgroundColor = 'lightred';
-//     } else {
-//         bacBar.style.backgroundColor = 'darkred';
-//     }
-// }
 
 function clearCookie() {
     document.cookie = "userData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -101,23 +52,11 @@ function saveUserInfo() {
     const gender = document.getElementById('gender').value;
     const weight = document.getElementById('weight').value;
     const height = document.getElementById('height').value;
-    const userInfo = { gender, weight, height };
+    const age = document.getElementById('age').value;
+    const userInfo = { gender, weight, height, age };
     document.cookie = `userData=${JSON.stringify(userInfo)}; path=/;`;
     closePopup('user-info-popup');
     updateUserInfoDisplay();
-    updateBACBar();
-}
-
-function saveDrink(hour, drinkType, percentAlcohol, quantity) {
-    let drinkData = getCookie('drinkData');
-    drinkData = drinkData ? JSON.parse(drinkData) : {};
-    if (!drinkData[hour]) {
-        drinkData[hour] = [];
-    }
-    drinkData[hour].push({ drinkType, percentAlcohol, quantity });
-    document.cookie = `drinkData=${JSON.stringify(drinkData)}; path=/;`;
-    closePopup('drink-popup');
-    updateClockDisplay();
     updateBACBar();
 }
 
@@ -128,14 +67,24 @@ function getCookie(name) {
 }
 
 function loadUserData() {
-    const userData = getCookie('userData');
-    if (userData) {
-        const { gender, weight, height } = JSON.parse(userData);
-        document.getElementById('gender').value = gender;
-        document.getElementById('weight').value = weight;
-        document.getElementById('height').value = height;
-        updateUserInfoDisplay();
+    let userData = getCookie('userData');
+    if (!userData) {
+        // Set default values
+        userData = JSON.stringify({
+            gender: 'male',
+            weight: 80,
+            height: 172,
+            age: 30
+        });
+        document.cookie = `userData=${userData}; path=/;`;
     }
+
+    const { gender, weight, height, age } = JSON.parse(userData);
+    document.getElementById('gender').value = gender;
+    document.getElementById('weight').value = weight;
+    document.getElementById('height').value = height;
+    document.getElementById('age').value = age;
+    updateUserInfoDisplay();
 }
 
 function loadDrinkData() {
@@ -148,8 +97,8 @@ function loadDrinkData() {
 function updateUserInfoDisplay() {
     const userData = getCookie('userData');
     if (userData) {
-        const { gender, weight, height } = JSON.parse(userData);
-        document.getElementById('user-info').innerText = `${gender} / ${weight}kg / ${height}cm`;
+        const { gender, weight, height, age } = JSON.parse(userData);
+        document.getElementById('user-info').innerText = `${gender} / ${weight}kg / ${height}cm / ${age} years`;
     }
 }
 
@@ -190,26 +139,79 @@ function updateClockDisplay() {
 function calculateBAC() {
     const userData = getCookie('userData');
     const drinkData = getCookie('drinkData');
-    if (!userData || !drinkData) return 0;
-
-    const { gender, weight } = JSON.parse(userData);
-    const drinks = JSON.parse(drinkData);
-
-    let totalAlcohol = 0;
-    for (const hour in drinks) {
-        drinks[hour].forEach(drink => {
-            const quantity = parseInt(drink.quantity);
-            if (drink.drinkType === 'beer') {
-                totalAlcohol += quantity * 14; // Approximate grams of alcohol in a beer
-            } else if (drink.drinkType === 'wine') {
-                totalAlcohol += quantity * 20; // Approximate grams of alcohol in a wine
-            }
-        });
+    if (!userData || !drinkData) {
+        console.log('No user data or drink data found.');
+        return 0;
     }
 
-    const r = gender === 'male' ? 0.68 : 0.55;
-    const bac = (totalAlcohol / (weight * r)) * 100;
-    return bac;
+    const { gender, weight, height, age } = JSON.parse(userData);
+    const drinks = JSON.parse(drinkData);
+
+    console.log('User Data:', { gender, weight, height, age });
+    console.log('Drink Data:', drinks);
+
+    const beta = 0.015;
+    let totalBAC = 0;
+    let totalAlcohol = 0;
+    let r;
+    let TBW; // Declare TBW outside the if-else blocks
+
+    if (gender === 'male') {
+        TBW = 2.447 - 0.09156 * age + 0.1074 * height + 0.3362 * weight;
+        r = TBW / weight;
+    } else {
+        TBW = -2.097 + 0.1069 * height + 0.2466 * weight;
+        r = TBW / weight;
+    }
+
+    console.log('Total Body Water (TBW):', TBW);
+    console.log('Ratio (r):', r);
+
+    const bacTable = [];
+    const currentHour = new Date().getHours();
+
+    for (let hour = 0; hour <= currentHour; hour++) {
+        if (drinks[hour]) {
+            drinks[hour].forEach(drink => {
+                const quantity = parseInt(drink.quantity);
+                const percentAlcohol = parseFloat(drink.percentAlcohol);
+                const alcoholMass = (quantity * percentAlcohol * 0.789) / 100; // 0.789 is the density of ethanol in g/ml
+
+                totalAlcohol += alcoholMass;
+            });
+        }
+
+        const timeElapsed = currentHour - hour;
+        const bac = (totalAlcohol / (r * weight)) - (beta * timeElapsed);
+        totalBAC = Math.max(bac, 0); // BAC cannot be negative
+
+        console.log('Hour:', hour, 'Total Alcohol:', totalAlcohol, 'Time Elapsed:', timeElapsed, 'BAC:', totalBAC);
+
+        bacTable.push({ time: `${hour}:00`, bac: totalBAC.toFixed(3) });
+    }
+
+    console.log('BAC Table:', bacTable);
+
+    updateBACTable(bacTable);
+    return totalBAC;
+}
+
+function updateBACTable(bacTable) {
+    const tableBody = document.querySelector('#bac-table tbody');
+    tableBody.innerHTML = ''; // Clear existing rows
+
+    bacTable.forEach(entry => {
+        const row = document.createElement('tr');
+        const timeCell = document.createElement('td');
+        const bacCell = document.createElement('td');
+
+        timeCell.textContent = entry.time;
+        bacCell.textContent = entry.bac;
+
+        row.appendChild(timeCell);
+        row.appendChild(bacCell);
+        tableBody.appendChild(row);
+    });
 }
 
 function clearCookie() {

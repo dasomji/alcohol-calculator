@@ -44,6 +44,17 @@
         </tbody>
     </table>
 
+    <table id="bac-table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>BAC</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
     <!-- Popups -->
     <div id="user-info-popup" class="popup">
         <h2>User Info</h2>
@@ -60,6 +71,9 @@
             <br>
             <label for="height">Height (cm):</label>
             <input type="number" id="height" required>
+            <br>
+            <label for="age">Age:</label>
+            <input type="number" id="age" required>
             <br>
             <button type="submit">Save</button>
             <button type="button" onclick="closePopup('user-info-popup')">Cancel</button>
