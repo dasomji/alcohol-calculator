@@ -109,30 +109,34 @@ function updateClockDisplay() {
 
     if (drinkData) {
         const data = JSON.parse(drinkData);
-        for (const hour in data) {
-            const drinks = data[hour];
-            drinks.forEach(drink => {
-                const row = document.createElement('tr');
-                const timeCell = document.createElement('td');
-                const typeCell = document.createElement('td');
-                const percentCell = document.createElement('td');
-                const volumeCell = document.createElement('td');
+        const hours = [...Array(12).keys()].map(i => i + 7).concat([...Array(6).keys()].map(i => i + 1));
 
-                // Format the hour to display as "9:00" or "8:00"
-                const formattedHour = `${hour}:00`;
+        hours.forEach(hour => {
+            if (data[hour]) {
+                const drinks = data[hour];
+                drinks.forEach(drink => {
+                    const row = document.createElement('tr');
+                    const timeCell = document.createElement('td');
+                    const typeCell = document.createElement('td');
+                    const percentCell = document.createElement('td');
+                    const volumeCell = document.createElement('td');
 
-                timeCell.textContent = formattedHour;
-                typeCell.textContent = drink.drinkType;
-                percentCell.textContent = drink.percentAlcohol; // Assuming percentAlcohol is stored in drink data
-                volumeCell.textContent = drink.quantity; // Assuming quantity is the volume in ml
+                    // Format the hour to display as "9:00" or "8:00"
+                    const formattedHour = `${hour}:00`;
 
-                row.appendChild(timeCell);
-                row.appendChild(typeCell);
-                row.appendChild(percentCell);
-                row.appendChild(volumeCell);
-                tableBody.appendChild(row);
-            });
-        }
+                    timeCell.textContent = formattedHour;
+                    typeCell.textContent = drink.drinkType;
+                    percentCell.textContent = drink.percentAlcohol; // Assuming percentAlcohol is stored in drink data
+                    volumeCell.textContent = drink.quantity; // Assuming quantity is the volume in ml
+
+                    row.appendChild(timeCell);
+                    row.appendChild(typeCell);
+                    row.appendChild(percentCell);
+                    row.appendChild(volumeCell);
+                    tableBody.appendChild(row);
+                });
+            }
+        });
     }
 }
 
@@ -150,7 +154,7 @@ function calculateBAC() {
     console.log('User Data:', { gender, weight, height, age });
     console.log('Drink Data:', drinks);
 
-    const beta = 0.015;
+    const beta = -0.015;
     let totalBAC = 0;
     let totalAlcohol = 0;
     let r;
@@ -158,37 +162,37 @@ function calculateBAC() {
 
     if (gender === 'male') {
         TBW = 2.447 - 0.09156 * age + 0.1074 * height + 0.3362 * weight;
-        r = TBW / weight;
     } else {
         TBW = -2.097 + 0.1069 * height + 0.2466 * weight;
-        r = TBW / weight;
     }
+    r = TBW / weight;
 
     console.log('Total Body Water (TBW):', TBW);
     console.log('Ratio (r):', r);
 
     const bacTable = [];
-    const currentHour = new Date().getHours();
+    const hours = [...Array(24).keys()].map(i => (i + 19) % 24); // Hours from 7 PM to 6 PM
 
-    for (let hour = 0; hour <= currentHour; hour++) {
+    hours.forEach(hour => {
         if (drinks[hour]) {
             drinks[hour].forEach(drink => {
                 const quantity = parseInt(drink.quantity);
                 const percentAlcohol = parseFloat(drink.percentAlcohol);
-                const alcoholMass = (quantity * percentAlcohol * 0.789) / 100; // 0.789 is the density of ethanol in g/ml
+                const alcoholMass = (quantity * 0.001 * percentAlcohol * 0.789) / 100; // 0.789 is the density of ethanol in g/ml
 
                 totalAlcohol += alcoholMass;
             });
         }
 
-        const timeElapsed = currentHour - hour;
-        const bac = (totalAlcohol / (r * weight)) - (beta * timeElapsed);
+        const timeElapsed = 0;
+        // const bac = (totalAlcohol / (r * weight)) - (beta * timeElapsed);
+        const bac = (totalAlcohol / (r * weight)) * 1000 * 0.8;
         totalBAC = Math.max(bac, 0); // BAC cannot be negative
 
         console.log('Hour:', hour, 'Total Alcohol:', totalAlcohol, 'Time Elapsed:', timeElapsed, 'BAC:', totalBAC);
 
         bacTable.push({ time: `${hour}:00`, bac: totalBAC.toFixed(3) });
-    }
+    });
 
     console.log('BAC Table:', bacTable);
 
