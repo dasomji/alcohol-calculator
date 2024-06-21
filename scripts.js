@@ -155,7 +155,7 @@ function calculateBAC() {
     console.log('Drink Data:', drinks);
 
     const beta = 0.15;
-    let totalBAC = 0;
+    // let totalBAC = 0;
     let totalAlcohol = 0;
     let r;
     let TBW; // Declare TBW outside the if-else blocks
@@ -173,7 +173,7 @@ function calculateBAC() {
 
     const bacTable = [];
     const hours = [...Array(24).keys()].map(i => (i + 18) % 24); // Hours from 7 PM to 6 PM
-
+    console.log(hours);
     hours.forEach(hour => {
         if (drinks[hour]) {
             drinks[hour].forEach(drink => {
@@ -185,12 +185,15 @@ function calculateBAC() {
             });
         }
 
-        let bac = (totalAlcohol / (r * weight)) * 1000 * 0.8;
+        const bac = (totalAlcohol / (r * weight)) * 1000 * 0.8;
+        const totalBAC = Math.max(bac, 0); // BAC cannot be negative
         if (bac > 0) {
-            bac -= beta * elapsedTime;
-            elapsedTime += 1;
+            const reducedBAC = totalBAC - beta;
+            const reducedTotalAlcohol = (reducedBAC / 1000 / 0.8) * (r * weight);
+            totalAlcohol = reducedTotalAlcohol;
+
         }
-        totalBAC = Math.max(bac, 0); // BAC cannot be negative
+
 
         console.log('Hour:', hour, 'Total Alcohol:', totalAlcohol, 'BAC:', totalBAC);
 
