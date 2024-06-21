@@ -10,14 +10,14 @@
         "name": "Wein",
         "percentAlcohol": 12,
         "imageUrl": "images/min-drinks/wein-min.png",
-        "volume": 200,
+        "volume": 125,
         "pictogram": "🍷"
     },
     {
         "name": "Shot",
         "percentAlcohol": 40,
         "imageUrl": "images/min-drinks/shot-min.png",
-        "volume": 40,
+        "volume": 20,
         "pictogram": "🥃"
     },
     {
