@@ -154,11 +154,12 @@ function calculateBAC() {
     console.log('User Data:', { gender, weight, height, age });
     console.log('Drink Data:', drinks);
 
-    const beta = -0.015;
+    const beta = 0.15;
     let totalBAC = 0;
     let totalAlcohol = 0;
     let r;
     let TBW; // Declare TBW outside the if-else blocks
+    let elapsedTime = 0;
 
     if (gender === 'male') {
         TBW = 2.447 - 0.09156 * age + 0.1074 * height + 0.3362 * weight;
@@ -184,14 +185,16 @@ function calculateBAC() {
             });
         }
 
-        const timeElapsed = 0;
-        // const bac = (totalAlcohol / (r * weight)) - (beta * timeElapsed);
-        const bac = (totalAlcohol / (r * weight)) * 1000 * 0.8;
+        let bac = (totalAlcohol / (r * weight)) * 1000 * 0.8;
+        if (bac > 0) {
+            bac -= beta * elapsedTime;
+            elapsedTime += 1;
+        }
         totalBAC = Math.max(bac, 0); // BAC cannot be negative
 
-        console.log('Hour:', hour, 'Total Alcohol:', totalAlcohol, 'Time Elapsed:', timeElapsed, 'BAC:', totalBAC);
+        console.log('Hour:', hour, 'Total Alcohol:', totalAlcohol, 'BAC:', totalBAC);
 
-        bacTable.push({ time: `${hour}:00`, bac: totalBAC.toFixed(3) });
+        bacTable.push({ time: `${hour}:00`, bac: totalBAC });
     });
 
     console.log('BAC Table:', bacTable);
@@ -210,7 +213,7 @@ function updateBACTable(bacTable) {
         const bacCell = document.createElement('td');
 
         timeCell.textContent = entry.time;
-        bacCell.textContent = entry.bac;
+        bacCell.textContent = entry.bac.toFixed(2);
 
         row.appendChild(timeCell);
         row.appendChild(bacCell);
