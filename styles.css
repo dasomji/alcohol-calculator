@@ -114,6 +114,7 @@ body {
   left: 45%;
   top: 45%;
   position: absolute;
+  cursor: pointer;
   text-align: center;
   font-size: 1em;
   color: white;
@@ -201,4 +202,8 @@ body {
 #bacChart-container {
     width: 100%;
 }
-/*# sourceMappingURL=styles.css.map */
+
+button{
+    margin: 10px;
+    border-radius: 8px;
+}
