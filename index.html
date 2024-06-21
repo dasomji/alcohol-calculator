@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Promill-Rechner</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h1>Promill-Rechner</h1>
@@ -46,16 +47,9 @@
         </tbody>
     </table>
 
-    <table id="bac-table">
-        <thead>
-            <tr>
-                <th>Time</th>
-                <th>BAC</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div id="bacChart-container">
+        <canvas id="bacChart"></canvas>
+    </div>
 
     <!-- Popups -->
     <div id="user-info-popup" class="popup">

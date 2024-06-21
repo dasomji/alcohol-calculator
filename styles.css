@@ -192,4 +192,13 @@ body {
 .drink-info p {
     margin: 0;
 }
+
+#bacChart {
+    width: 100%;
+    height: auto;
+}
+
+#bacChart-container {
+    width: 100%;
+}
 /*# sourceMappingURL=styles.css.map */

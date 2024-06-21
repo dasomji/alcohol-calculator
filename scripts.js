@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("hello")
     loadUserData();
     loadDrinkData();
-    // updateBACBar();
+    // updateBACTable();
     loadDrinkOptions();
 });
 
@@ -203,24 +203,85 @@ function calculateBAC() {
     console.log('BAC Table:', bacTable);
 
     updateBACTable(bacTable);
-    return totalBAC;
 }
 
+let bacChartInstance = null;
+
 function updateBACTable(bacTable) {
-    const tableBody = document.querySelector('#bac-table tbody');
-    tableBody.innerHTML = ''; // Clear existing rows
+    // Find the first and last index where BAC > 0
+    let firstIndex = bacTable.findIndex(entry => entry.bac > 0);
+    let lastIndex = bacTable.length - 1 - [...bacTable].reverse().findIndex(entry => entry.bac > 0);
 
-    bacTable.forEach(entry => {
-        const row = document.createElement('tr');
-        const timeCell = document.createElement('td');
-        const bacCell = document.createElement('td');
+    // Include one data point before the first and one after the last BAC > 0
+    firstIndex = Math.max(firstIndex - 1, 0);
+    lastIndex = Math.min(lastIndex + 1, bacTable.length - 1);
 
-        timeCell.textContent = entry.time;
-        bacCell.textContent = entry.bac.toFixed(2);
+    // Filter the bacTable to include only the relevant data points
+    const filteredBacTable = bacTable.slice(firstIndex, lastIndex + 1);
 
-        row.appendChild(timeCell);
-        row.appendChild(bacCell);
-        tableBody.appendChild(row);
+    const ctx = document.getElementById('bacChart').getContext('2d');
+    const labels = filteredBacTable.map(entry => entry.time);
+
+    // Create datasets for different BAC ranges
+    const datasets = [];
+    const ranges = [
+        { max: 0.5, color: 'rgba(0, 128, 0, 0.5)' },
+        { max: 1, color: 'rgba(255, 255, 0, 0.5)' },
+        { max: 1.5, color: 'rgba(255, 165, 0, 0.5)' },
+        { max: 2.5, color: 'rgba(255, 140, 0, 0.5)' },
+        { max: 3, color: 'rgba(255, 69, 0, 0.5)' },
+        { max: Infinity, color: 'rgba(139, 0, 0, 0.5)' }
+    ];
+
+    ranges.forEach((range, index) => {
+        const data = filteredBacTable.map(entry => {
+            if (entry.bac <= range.max) {
+                return entry.bac;
+            } else {
+                return null;
+            }
+        });
+
+        datasets.push({
+            label: `BAC <= ${range.max}`,
+            data: data,
+            backgroundColor: range.color,
+            borderColor: 'rgba(0, 0, 0, 1)',
+            borderWidth: 1,
+            fill: true,
+            spanGaps: false
+        });
+    });
+
+    // Destroy the existing chart instance if it exists
+    if (bacChartInstance) {
+        bacChartInstance.destroy();
+    }
+
+    // Create a new chart instance
+    bacChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'BAC'
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
     });
 }
 
