@@ -249,7 +249,8 @@ function updateBACTable(bacTable) {
             borderColor: 'rgba(0, 0, 0, 1)',
             borderWidth: 1,
             fill: true,
-            spanGaps: false
+            spanGaps: false,
+            tension: 0.4 // Add this line to make the lines more rounded
         });
     });
 
@@ -283,6 +284,48 @@ function updateBACTable(bacTable) {
             }
         }
     });
+
+    // Render drink pictograms on the chart
+    const drinkData = getCookie('drinkData');
+    if (drinkData) {
+        const drinks = JSON.parse(drinkData);
+        const ctx = document.getElementById('bacChart').getContext('2d');
+
+        // Load drink data from drinks.json
+        fetch('drinks.json')
+            .then(response => response.json())
+            .then(drinkTypes => {
+                console.log('Drink types loaded:', drinkTypes); // Debugging statement
+                // Iterate over the drink data and render pictograms
+                Object.entries(drinks).forEach(([hour, drinkList]) => {
+                    console.log(`Hour: ${hour}, Drinks:`, drinkList); // Debugging statement
+                    drinkList.forEach(drink => {
+                        const drinkType = drinkTypes.find(type => type.name === drink.drinkType);
+                        if (drinkType) {
+                            const pictogram = drinkType.pictogram;
+                            const xPos = bacChartInstance.scales.x.getPixelForValue(parseInt(hour));
+                            const yPos = bacChartInstance.scales.y.getPixelForValue(0);
+                            console.log(`Rendering pictogram: ${pictogram} ${drinkType.name} at (${xPos}, ${yPos})`); // Debugging statement
+                            console.log(`Canvas width: ${ctx.canvas.width}, height: ${ctx.canvas.height}`); // Debugging statement
+                            if (xPos >= 0 && xPos <= ctx.canvas.width && yPos >= 0 && yPos <= ctx.canvas.height) {
+                                ctx.font = '24px Arial';
+                                ctx.fillStyle = 'black'; // Ensure fill style is set
+                                ctx.fillText(`${pictogram} ${drinkType.name}`, xPos, yPos);
+                            } else {
+                                console.log(`Coordinates out of bounds: (${xPos}, ${yPos})`); // Debugging statement
+                            }
+                        } else {
+                            console.log(`Drink type not found for: ${drink.drinkType}`); // Debugging statement
+                        }
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('Error loading drink types:', error);
+            });
+    } else {
+        console.log('No drink data found'); // Debugging statement
+    }
 }
 
 function clearCookie() {
