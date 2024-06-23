@@ -1,14 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("hello")
     loadUserData();
     loadDrinkData();
-    // updateBACTable();
     loadDrinkOptions();
+    updateClockDisplay();
 });
-
-function updateBACBar() {
-    console.log("There is no bar yet")
-}
 
 function openUserInfoPopup() {
     const popup = document.getElementById('user-info-popup');
@@ -30,7 +25,6 @@ function saveDrink(hour, drinkType, percentAlcohol, quantity) {
     document.cookie = `drinkData=${JSON.stringify(drinkData)}; path=/;`;
     closePopup('drink-popup');
     updateClockDisplay();
-    updateBACBar();
     calculateBAC();
 }
 
@@ -57,7 +51,6 @@ function saveUserInfo() {
     document.cookie = `userData=${JSON.stringify(userInfo)}; path=/;`;
     closePopup('user-info-popup');
     updateUserInfoDisplay();
-    updateBACBar();
 }
 
 function getCookie(name) {
@@ -104,39 +97,47 @@ function updateUserInfoDisplay() {
 
 function updateClockDisplay() {
     const drinkData = getCookie('drinkData');
-    const tableBody = document.querySelector('#drinks-table tbody');
-    tableBody.innerHTML = ''; // Clear existing rows
-
     if (drinkData) {
         const data = JSON.parse(drinkData);
-        const hours = [...Array(24).keys()]; // Hours from 0 to 23
+        const clockContainer = document.getElementById('clock');
 
-        hours.forEach(hour => {
-            if (data[hour]) {
-                const drinks = data[hour];
-                drinks.forEach(drink => {
-                    const row = document.createElement('tr');
-                    const timeCell = document.createElement('td');
-                    const typeCell = document.createElement('td');
-                    const percentCell = document.createElement('td');
-                    const volumeCell = document.createElement('td');
+        // Clear existing pictograms
+        const existingPictograms = clockContainer.querySelectorAll('.drink-group');
+        existingPictograms.forEach(pictogram => pictogram.remove());
 
-                    // Format the hour to display as "9:00" or "20:00"
-                    const formattedHour = `${hour.toString().padStart(2, '0')}:00`;
+        // Load drink types from drinks.json
+        fetch('drinks.json')
+            .then(response => response.json())
+            .then(drinkTypes => {
+                Object.entries(data).forEach(([hour, drinks]) => {
+                    const drinkGroup = document.createElement('div');
+                    drinkGroup.classList.add('drink-group');
 
-                    timeCell.textContent = formattedHour;
-                    typeCell.textContent = drink.drinkType;
-                    percentCell.textContent = drink.percentAlcohol; // Assuming percentAlcohol is stored in drink data
-                    volumeCell.textContent = drink.quantity; // Assuming quantity is the volume in ml
+                    drinks.forEach((drink, index) => {
+                        const drinkType = drinkTypes.find(type => type.name === drink.drinkType);
+                        if (drinkType) {
+                            const pictogram = document.createElement('span');
+                            pictogram.classList.add('drink-pictogram');
+                            pictogram.textContent = drinkType.pictogram;
+                            drinkGroup.appendChild(pictogram);
+                        }
+                    });
 
-                    row.appendChild(timeCell);
-                    row.appendChild(typeCell);
-                    row.appendChild(percentCell);
-                    row.appendChild(volumeCell);
-                    tableBody.appendChild(row);
+                    // Position the drink group
+                    const angle = (parseInt(hour) - 3) * 30; // -3 to start at 12 o'clock
+                    const radius = 200; // Adjust based on your clock size
+                    const factor = 90;
+                    const x = (Math.cos(angle * Math.PI / 180) * radius + radius / 2) + factor;
+                    const y = (Math.sin(angle * Math.PI / 180) * radius + radius / 2) + factor;
+
+                    drinkGroup.style.left = `${x}px`;
+                    drinkGroup.style.top = `${y}px`;
+                    drinkGroup.style.transform = `translate(-50%, -50%)`;
+
+                    clockContainer.appendChild(drinkGroup);
                 });
-            }
-        });
+            })
+            .catch(error => console.error('Error loading drink types:', error));
     }
 }
 

@@ -25,6 +25,7 @@ body {
   border-radius: 100%;
   position: relative;
   border: 10px solid black;
+  margin: 30px;;
 }
 
 .clock-hand {
@@ -207,4 +208,19 @@ body {
 button{
     margin: 10px;
     border-radius: 8px;
+}
+
+.drink-group {
+  position: absolute;
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 60px;
+  max-height: 60px;
+}
+
+.drink-pictogram {
+  font-size: 20px;
+  margin: 2px;
 }
