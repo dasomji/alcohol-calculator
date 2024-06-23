@@ -289,42 +289,50 @@ function updateBACTable(bacTable) {
     const drinkData = getCookie('drinkData');
     if (drinkData) {
         const drinks = JSON.parse(drinkData);
-        const ctx = document.getElementById('bacChart').getContext('2d');
 
         // Load drink data from drinks.json
         fetch('drinks.json')
             .then(response => response.json())
             .then(drinkTypes => {
-                console.log('Drink types loaded:', drinkTypes); // Debugging statement
-                // Iterate over the drink data and render pictograms
-                Object.entries(drinks).forEach(([hour, drinkList]) => {
-                    console.log(`Hour: ${hour}, Drinks:`, drinkList); // Debugging statement
-                    drinkList.forEach(drink => {
-                        const drinkType = drinkTypes.find(type => type.name === drink.drinkType);
-                        if (drinkType) {
-                            const pictogram = drinkType.pictogram;
-                            const xPos = bacChartInstance.scales.x.getPixelForValue(parseInt(hour));
-                            const yPos = bacChartInstance.scales.y.getPixelForValue(0);
-                            console.log(`Rendering pictogram: ${pictogram} ${drinkType.name} at (${xPos}, ${yPos})`); // Debugging statement
-                            console.log(`Canvas width: ${ctx.canvas.width}, height: ${ctx.canvas.height}`); // Debugging statement
-                            if (xPos >= 0 && xPos <= ctx.canvas.width && yPos >= 0 && yPos <= ctx.canvas.height) {
-                                ctx.font = '24px Arial';
-                                ctx.fillStyle = 'black'; // Ensure fill style is set
-                                ctx.fillText(`${pictogram} ${drinkType.name}`, xPos, yPos);
-                            } else {
-                                console.log(`Coordinates out of bounds: (${xPos}, ${yPos})`); // Debugging statement
-                            }
-                        } else {
-                            console.log(`Drink type not found for: ${drink.drinkType}`); // Debugging statement
+                console.log('Drink types loaded:', drinkTypes);
+
+                // Wait for the chart animation to finish
+                bacChartInstance.options.animation.onComplete = () => {
+                    const ctx = bacChartInstance.ctx;
+                    const chartArea = bacChartInstance.chartArea;
+
+                    // Iterate over the drink data and render pictograms
+                    Object.entries(drinks).forEach(([hour, drinkList]) => {
+                        const xPos = bacChartInstance.scales.x.getPixelForValue(hour + ':00');
+                        let yPos = chartArea.bottom;
+                        const stackOffset = 30; // Vertical space between stacked drinks
+
+                        if (xPos >= chartArea.left && xPos <= chartArea.right) {
+                            drinkList.forEach((drink, index) => {
+                                const drinkType = drinkTypes.find(type => type.name === drink.drinkType);
+                                if (drinkType) {
+                                    const pictogram = drinkType.pictogram;
+
+                                    ctx.save();
+                                    ctx.font = '24px Arial';
+                                    ctx.fillStyle = 'black';
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'bottom';
+                                    ctx.fillText(pictogram, xPos, yPos - (index * stackOffset));
+                                    ctx.restore();
+                                } else {
+                                    console.log(`Drink type not found for: ${drink.drinkType}`);
+                                }
+                            });
                         }
                     });
-                });
+                };
             })
             .catch(error => {
                 console.error('Error loading drink types:', error);
             });
     } else {
-        console.log('No drink data found'); // Debugging statement
+        console.log('No drink data found');
     }
 }
 
@@ -374,21 +382,3 @@ async function loadDrinkOptions() {
         console.error('Error loading drink options:', error);
     }
 }
-
-// function updateBACBar() {
-//     const bac = calculateBAC();
-//     const bacBar = document.getElementById('bac-bar');
-//     if (bac <= 0.5) {
-//         bacBar.style.backgroundColor = 'green';
-//     } else if (bac <= 1) {
-//         bacBar.style.backgroundColor = 'yellow';
-//     } else if (bac <= 1.5) {
-//         bacBar.style.backgroundColor = 'darkyellow';
-//     } else if (bac <= 2.5) {
-//         bacBar.style.backgroundColor = 'orange';
-//     } else if (bac <= 3) {
-//         bacBar.style.backgroundColor = 'lightred';
-//     } else {
-//         bacBar.style.backgroundColor = 'darkred';
-//     }
-// }
