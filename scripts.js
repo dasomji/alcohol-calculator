@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadDrinkData();
     loadDrinkOptions();
     updateClockDisplay();
-    updateBACTable();
+    calculateBAC();
+    initializeSliders();
 });
 
 function openUserInfoPopup() {
@@ -77,8 +78,11 @@ function loadUserData() {
     const { gender, weight, height, age } = JSON.parse(userData);
     document.getElementById('gender').value = gender;
     document.getElementById('weight').value = weight;
+    document.getElementById('weight-slider').value = weight;
     document.getElementById('height').value = height;
+    document.getElementById('height-slider').value = height;
     document.getElementById('age').value = age;
+    document.getElementById('age-slider').value = age;
     updateUserInfoDisplay();
 }
 
@@ -480,4 +484,21 @@ function showMobilePopup(description) {
 function closeMobilePopup() {
     const popup = document.getElementById('mobile-popup');
     popup.classList.remove('active');
+}
+
+function initializeSliders() {
+    const sliders = ['weight', 'height', 'age'];
+    sliders.forEach(slider => {
+        const rangeInput = document.getElementById(`${slider}-slider`);
+        const numberInput = document.getElementById(slider);
+
+        rangeInput.addEventListener('input', () => {
+            numberInput.value = rangeInput.value;
+        });
+
+        numberInput.addEventListener('input', () => {
+            rangeInput.value = numberInput.value;
+        });
+    });
+    console.log("initialised")
 }
