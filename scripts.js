@@ -323,10 +323,37 @@ function updateBACTable(bacTable) {
                     }
                 }
             },
+            onHover: (event, elements) => {
+                const chart = bacChartInstance;
+                const canvasPosition = Chart.helpers.getRelativePosition(event, chart);
+                const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
+                const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
+
+                for (let i = 0; i < datasets.length; i++) {
+                    if (dataY <= datasets[i].data[Math.floor(dataX)]) {
+                        if (!('ontouchstart' in window)) {
+                            showDesktopTooltip(event, promillDescriptions[i]);
+                        }
+                        return;
+                    }
+                }
+                if (!('ontouchstart' in window)) {
+                    hideDesktopTooltip();
+                }
+            },
             onClick: (event, elements) => {
-                if (elements.length > 0 && 'ontouchstart' in window) {
-                    const index = elements[0].datasetIndex;
-                    showMobilePopup(promillDescriptions[index]);
+                if ('ontouchstart' in window) {
+                    const chart = bacChartInstance;
+                    const canvasPosition = Chart.helpers.getRelativePosition(event, chart);
+                    const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
+                    const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
+
+                    for (let i = 0; i < datasets.length; i++) {
+                        if (dataY <= datasets[i].data[Math.floor(dataX)]) {
+                            showMobilePopup(promillDescriptions[i]);
+                            return;
+                        }
+                    }
                 }
             }
         }
@@ -445,7 +472,8 @@ function hideDesktopTooltip() {
 
 function showMobilePopup(description) {
     const popup = document.getElementById('mobile-popup');
-    popup.innerHTML = `<h3>${description.title}</h3><p>${description.description}</p>`;
+    const popupContent = document.getElementById("mobile-popup-content");
+    popupContent.innerHTML = `<h3>${description.title}</h3><p>${description.description}</p>`;
     popup.classList.add('active');
 }
 

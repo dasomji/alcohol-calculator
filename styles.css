@@ -185,7 +185,7 @@ body {
   height: auto;
 }
 
-.popup-content {
+.drink-popup-content {
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
@@ -299,4 +299,30 @@ body {
 .drink-pictogram {
   font-size: 18px;
   margin: 2px;
+}
+
+#desktop-tooltip {
+  display: none;
+  position: absolute;
+  background: white;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 10px;
+  z-index: 1000;
+  border-radius: 8px;
+  text-align: left;
+}
+#mobile-popup .popup-content{
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+#mobile-popup .popup-content span{
+  align-self: flex-end;
+}
+
+#mobile-popup-content {
+  text-align: left;
 }
