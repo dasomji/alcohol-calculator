@@ -67,10 +67,10 @@ function loadUserData() {
     if (!userData) {
         // Set default values
         userData = JSON.stringify({
-            gender: 'male',
-            weight: 80,
-            height: 172,
-            age: 30
+            gender: 'female',
+            weight: 40,
+            height: 150,
+            age: 14
         });
         document.cookie = `userData=${userData}; path=/;`;
     }
@@ -97,7 +97,21 @@ function updateUserInfoDisplay() {
     const userData = getCookie('userData');
     if (userData) {
         const { gender, weight, height, age } = JSON.parse(userData);
-        document.getElementById('user-info').innerText = `${gender} / ${weight}kg / ${height}cm / ${age} years`;
+        let displayGender;
+        switch (gender) {
+            case 'male':
+                displayGender = 'Mann';
+                break;
+            case 'female':
+                displayGender = 'Frau';
+                break;
+            case 'inter':
+                displayGender = 'Inter';
+                break;
+            default:
+                displayGender = gender;
+        }
+        document.getElementById('user-info').innerText = `${displayGender} / ${weight}kg / ${height}cm / ${age} Jahre`;
     }
 }
 

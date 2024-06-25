@@ -16,6 +16,7 @@ select, input{
 }
 
 #user-info-container {
+  width: calc(100vw - 160px);
   display: flex;
   flex-flow: column;
   justify-content: center;
@@ -27,6 +28,8 @@ select, input{
   border: none;
   display: inline-block;
   padding: 10px;
+  color: #3f3f3f;
+  text-decoration: none;
   border-radius: 16px;
   cursor: pointer;
   font-size: 1em;
