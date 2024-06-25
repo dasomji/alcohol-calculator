@@ -66,14 +66,15 @@
     </div>
         
     <div id="drink-popup" class="popup">
-        <h2>Getränk hinzufügen</h2>
-        <div id="drinks-container">
-        <!-- Drink options will be dynamically loaded here -->
+        <div id="drink-popup-content">
+            <h2>Getränk hinzufgen</h2>
+            <div id="drinks-container">
+            <!-- Drink options will be dynamically loaded here -->
+            </div>
+            <button type="button" onclick="closePopup('drink-popup')">Cancel</button>
         </div>
-        <button type="button" onclick="closePopup('drink-popup')">Cancel</button>
     </div>
 
-    <!-- Add these elements to your HTML file, preferably just before the closing </body> tag -->
     <div id="desktop-tooltip" style="display: none; position: absolute; background: white; border: 1px solid black; padding: 10px; z-index: 1000;"></div>
     <div id="mobile-popup" class="popup">
         <div class="popup-content">

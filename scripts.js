@@ -250,7 +250,19 @@ function updateBACTable(bacTable) {
             }
         });
 
-        const color = `hsl(${120 - (index * 20)}, 70%, 50%, 0.5)`;
+        const colors = [
+            '#dbe1e6',
+            '#c7d3db',
+            '#a3b8c2',
+            '#7f94a3',
+            '#6b7f8d',
+            '#576a77',
+            '#435561',
+            '#2f404b',
+            '#1b2b35',
+            '#07161f'
+        ];
+        const color = colors[index % colors.length];
 
         datasets.push({
             label: range.title,
@@ -340,7 +352,7 @@ function updateBACTable(bacTable) {
                     Object.entries(drinks).forEach(([hour, drinkList]) => {
                         const xPos = bacChartInstance.scales.x.getPixelForValue(hour + ':00');
                         let yPos = chartArea.bottom;
-                        const stackOffset = 30; // Vertical space between stacked drinks
+                        const stackOffset = 20; // Vertical space between stacked drinks
 
                         if (xPos >= chartArea.left && xPos <= chartArea.right) {
                             drinkList.forEach((drink, index) => {
@@ -349,7 +361,7 @@ function updateBACTable(bacTable) {
                                     const pictogram = drinkType.pictogram;
 
                                     ctx.save();
-                                    ctx.font = '24px Arial';
+                                    ctx.font = '1rem Arial';
                                     ctx.fillStyle = 'black';
                                     ctx.textAlign = 'center';
                                     ctx.textBaseline = 'bottom';
