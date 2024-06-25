@@ -1,8 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadPromillDescriptions();
     loadUserData();
     loadDrinkData();
     loadDrinkOptions();
     updateClockDisplay();
+    updateBACTable();
 });
 
 function openUserInfoPopup() {
@@ -213,6 +215,15 @@ function calculateBAC() {
 
 let bacChartInstance = null;
 
+async function loadPromillDescriptions() {
+    try {
+        const response = await fetch('promill-description.json');
+        promillDescriptions = await response.json();
+    } catch (error) {
+        console.error('Error loading promill descriptions:', error);
+    }
+}
+
 function updateBACTable(bacTable) {
     // Find the first and last index where BAC > 0
     let firstIndex = bacTable.findIndex(entry => entry.bac > 0);
@@ -230,33 +241,26 @@ function updateBACTable(bacTable) {
 
     // Create datasets for different BAC ranges
     const datasets = [];
-    const ranges = [
-        { max: 0.5, color: 'rgba(0, 128, 0, 0.5)' },
-        { max: 1, color: 'rgba(255, 255, 0, 0.5)' },
-        { max: 1.5, color: 'rgba(255, 165, 0, 0.5)' },
-        { max: 2.5, color: 'rgba(255, 140, 0, 0.5)' },
-        { max: 3, color: 'rgba(255, 69, 0, 0.5)' },
-        { max: Infinity, color: 'rgba(139, 0, 0, 0.5)' }
-    ];
-
-    ranges.forEach((range, index) => {
+    promillDescriptions.forEach((range, index) => {
         const data = filteredBacTable.map(entry => {
-            if (entry.bac <= range.max) {
+            if (entry.bac <= range.promill) {
                 return entry.bac;
             } else {
                 return null;
             }
         });
 
+        const color = `hsl(${120 - (index * 20)}, 70%, 50%, 0.5)`;
+
         datasets.push({
-            label: `BAC <= ${range.max}`,
+            label: range.title,
             data: data,
-            backgroundColor: range.color,
+            backgroundColor: color,
             borderColor: 'rgba(0, 0, 0, 1)',
             borderWidth: 1,
             fill: true,
             spanGaps: false,
-            tension: 0.4 // Add this line to make the lines more rounded
+            tension: 0.4
         });
     });
 
@@ -277,15 +281,37 @@ function updateBACTable(bacTable) {
                 x: {
                     title: {
                         display: true,
-                        text: 'Time'
+                        text: 'Uhrzeit'
+                    },
+                    grid: {
+                        display: false // Hide x-axis grid
                     }
                 },
                 y: {
                     title: {
                         display: true,
-                        text: 'BAC'
+                        text: '‰ Alkohol'
+                    },
+                    grid: {
+                        display: false // Hide x-axis grid
                     },
                     beginAtZero: true
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const description = promillDescriptions[context.datasetIndex].description;
+                            return `${context.dataset.label}: ${context.parsed.y.toFixed(2)}‰\n${description}`;
+                        }
+                    }
+                }
+            },
+            onClick: (event, elements) => {
+                if (elements.length > 0 && 'ontouchstart' in window) {
+                    const index = elements[0].datasetIndex;
+                    showMobilePopup(promillDescriptions[index]);
                 }
             }
         }
@@ -387,4 +413,28 @@ async function loadDrinkOptions() {
     } catch (error) {
         console.error('Error loading drink options:', error);
     }
+}
+
+function showDesktopTooltip(event, description) {
+    const tooltip = document.getElementById('desktop-tooltip');
+    tooltip.innerHTML = `<h3>${description.title}</h3><p>${description.description}</p>`;
+    tooltip.style.display = 'block';
+    tooltip.style.left = `${event.clientX + 10}px`;
+    tooltip.style.top = `${event.clientY + 10}px`;
+}
+
+function hideDesktopTooltip() {
+    const tooltip = document.getElementById('desktop-tooltip');
+    tooltip.style.display = 'none';
+}
+
+function showMobilePopup(description) {
+    const popup = document.getElementById('mobile-popup');
+    popup.innerHTML = `<h3>${description.title}</h3><p>${description.description}</p>`;
+    popup.classList.add('active');
+}
+
+function closeMobilePopup() {
+    const popup = document.getElementById('mobile-popup');
+    popup.classList.remove('active');
 }
