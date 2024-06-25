@@ -105,6 +105,13 @@ function updateClockDisplay() {
         const existingPictograms = clockContainer.querySelectorAll('.drink-group');
         existingPictograms.forEach(pictogram => pictogram.remove());
 
+        // Get the clock dimensions
+        const clockRect = clockContainer.getBoundingClientRect();
+        const clockSize = Math.min(clockRect.width, clockRect.height);
+
+        // Calculate the radius for positioning drinks
+        const radius = (clockSize / 2) * 1.2; // 10% outside the clock face
+
         // Load drink types from drinks.json
         fetch('drinks.json')
             .then(response => response.json())
@@ -124,15 +131,13 @@ function updateClockDisplay() {
                     });
 
                     // Position the drink group
-                    const angle = (parseInt(hour) - 3) * 30; // -3 to start at 12 o'clock
-                    const radius = 200; // Adjust based on your clock size
-                    const factor = 90;
-                    const x = (Math.cos(angle * Math.PI / 180) * radius + radius / 2) + factor;
-                    const y = (Math.sin(angle * Math.PI / 180) * radius + radius / 2) + factor;
+                    const angle = (parseInt(hour) - 3) * 30 * (Math.PI / 180); // Convert to radians
+                    const x = Math.cos(angle) * radius + (clockSize / 2);
+                    const y = Math.sin(angle) * radius + (clockSize / 2);
 
                     drinkGroup.style.left = `${x}px`;
                     drinkGroup.style.top = `${y}px`;
-                    drinkGroup.style.transform = `translate(-50%, -50%)`;
+                    drinkGroup.style.transform = 'translate(-50%, -50%)';
 
                     clockContainer.appendChild(drinkGroup);
                 });

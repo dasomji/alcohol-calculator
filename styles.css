@@ -16,22 +16,36 @@ body {
   cursor: pointer;
 }
 
+#clock-container{
+  width:100vw;
+  height:auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #clock {
-  width: 100%;
-  max-width: 500px;
-  min-width: 300px;
+  width: calc(100vw - 160px);
+  max-width: 300px;
   aspect-ratio: 1/1;
   background-color: rgb(165, 165, 234);
   border-radius: 100%;
   position: relative;
   border: 10px solid black;
-  margin: 30px;;
+  margin: 30px;
+}
+
+@media (max-width: 900px) {
+  #clock {
+    width: calc(100vw - 160px);
+    max-width: 300px;
+  }
 }
 
 .clock-hand {
     position: absolute;
     color: #3f3f3f;
-    font-size: 0.7em;
+    font-size: 0.65em;
     width: auto;
     height: auto;
     left: 50%;
@@ -48,17 +62,17 @@ body {
     translate: -50% -50%;
     background-color: #3f3f3f;
 }
-.hour-hand {
+.left-hand {
     translate: -122% -50%;
     padding-left: 0.5em;
     padding-right: 0.5em;
 }
 
-.minute-hand {
+.right-hand {
     writing-mode: vertical-rl;
     transform: rotate(240deg);
-    translate: 50% -4px;
-    margin-left: 4px;
+    translate: 30% -4px;
+    padding-left: 1px;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
 }
@@ -175,7 +189,6 @@ body {
     background-position: center;
     border: 1px solid black;
     border-radius: 8px;
-    overflow: hidden;
 }
 
 
@@ -213,14 +226,24 @@ button{
 .drink-group {
   position: absolute;
   display: flex;
+  flex-flow: row wrap;
+  width:50px;
+  justify-content: flex-start;
+  align-items: center;
+  translate: 4px -12px;
+}
+
+/* .drink-group {
+  position: absolute;
+  display: flex;
   flex-flow: row;
   justify-content: flex-start;
   align-items: center;
   max-width: 60px;
   max-height: 60px;
-}
+} */
 
 .drink-pictogram {
-  font-size: 20px;
+  font-size: 18px;
   margin: 2px;
 }
