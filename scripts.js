@@ -122,6 +122,7 @@ function updateUserInfoDisplay() {
 function updateClockDisplay() {
     return new Promise((resolve) => {
         const clockContainer = document.getElementById('clock');
+        const clearButton = document.querySelector('.clear-button');
 
         // Clear existing pictograms
         const existingPictograms = clockContainer.querySelectorAll('.drink-group');
@@ -137,6 +138,8 @@ function updateClockDisplay() {
 
             // Calculate the radius for positioning drinks
             const radius = (clockSize / 2) * 1.3; // 30% outside the clock face
+
+            let maxBottom = 0;
 
             // Load drink types from drinks.json
             fetch('drinks.json')
@@ -166,11 +169,20 @@ function updateClockDisplay() {
                         drinkGroup.style.transform = 'translate(-50%, -50%)';
 
                         clockContainer.appendChild(drinkGroup);
+
+                        // Update maxBottom
+                        const rect = drinkGroup.getBoundingClientRect();
+                        maxBottom = Math.max(maxBottom, rect.bottom - clockRect.top);
                     });
+
+                    // Adjust the margin of the clear button
+                    const extraMargin = Math.max(0, maxBottom - clockSize);
+                    clearButton.style.marginTop = `${extraMargin}px`;
                 })
                 .catch(error => console.error('Error loading drink types:', error))
                 .finally(() => resolve());
         } else {
+            clearButton.style.marginTop = '0px';
             resolve();
         }
     });
