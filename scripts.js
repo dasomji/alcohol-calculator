@@ -120,14 +120,15 @@ function updateUserInfoDisplay() {
 
 function updateClockDisplay() {
     return new Promise((resolve) => {
+        const clockContainer = document.getElementById('clock');
+
+        // Clear existing pictograms
+        const existingPictograms = clockContainer.querySelectorAll('.drink-group');
+        existingPictograms.forEach(pictogram => pictogram.remove());
+
         const drinkData = getCookie('drinkData');
         if (drinkData) {
             const data = JSON.parse(drinkData);
-            const clockContainer = document.getElementById('clock');
-
-            // Clear existing pictograms
-            const existingPictograms = clockContainer.querySelectorAll('.drink-group');
-            existingPictograms.forEach(pictogram => pictogram.remove());
 
             // Get the clock dimensions
             const clockRect = clockContainer.getBoundingClientRect();
