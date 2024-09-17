@@ -180,7 +180,8 @@ function calculateBAC() {
     const drinkData = getCookie('drinkData');
     if (!userData || !drinkData) {
         console.log('No user data or drink data found.');
-        updateBACTable([]); // Update the chart with empty data
+        updateBACTable([]);
+        updateHighestBAC(0);
         return;
     }
 
@@ -191,11 +192,10 @@ function calculateBAC() {
     console.log('Drink Data:', drinks);
 
     const beta = 0.15;
-    // let totalBAC = 0;
     let totalAlcohol = 0;
     let r;
-    let TBW; // Declare TBW outside the if-else blocks
-    let elapsedTime = 0;
+    let TBW;
+    let highestBAC = 0;
 
     if (gender === 'male') {
         TBW = 2.447 - 0.09156 * age + 0.1074 * height + 0.3362 * weight;
@@ -208,37 +208,50 @@ function calculateBAC() {
     console.log('Ratio (r):', r);
 
     const bacTable = [];
-    const hours = [...Array(24).keys()].map(i => (i + 18) % 24); // Hours from 7 PM to 6 PM
+    const hours = [...Array(24).keys()].map(i => (i + 18) % 24);
     console.log(hours);
     hours.forEach(hour => {
         if (drinks[hour]) {
             drinks[hour].forEach(drink => {
                 const quantity = parseInt(drink.quantity);
                 const percentAlcohol = parseFloat(drink.percentAlcohol);
-                const alcoholMass = (quantity * 0.001 * percentAlcohol * 0.789) / 100; // 0.789 is the density of ethanol in g/ml
+                const alcoholMass = (quantity * 0.001 * percentAlcohol * 0.789) / 100;
 
                 totalAlcohol += alcoholMass;
             });
         }
 
         const bac = (totalAlcohol / (r * weight)) * 1000 * 0.8;
-        const totalBAC = Math.max(bac, 0); // BAC cannot be negative
+        const totalBAC = Math.max(bac, 0);
+        if (totalBAC > highestBAC) {
+            highestBAC = totalBAC;
+        }
+        bacTable.push({ time: `${hour}:00`, bac: totalBAC });
+
         if (bac > 0) {
             const reducedBAC = totalBAC - beta;
             const reducedTotalAlcohol = (reducedBAC / 1000 / 0.8) * (r * weight);
-            totalAlcohol = reducedTotalAlcohol;
-
+            totalAlcohol = Math.max(reducedTotalAlcohol, 0);
         }
 
-
         console.log('Hour:', hour, 'Total Alcohol:', totalAlcohol, 'BAC:', totalBAC);
-
-        bacTable.push({ time: `${hour}:00`, bac: totalBAC });
     });
 
     console.log('BAC Table:', bacTable);
-
     updateBACTable(bacTable);
+    updateHighestBAC(highestBAC);
+}
+
+function updateHighestBAC(highestBAC) {
+    const highestBACElement = document.getElementById('highest-bac');
+    const highestBACValueElement = document.getElementById('highest-bac-value');
+
+    if (highestBAC > 0) {
+        highestBACValueElement.textContent = highestBAC.toFixed(2);
+        highestBACElement.classList.remove('hidden');
+    } else {
+        highestBACElement.classList.add('hidden');
+    }
 }
 
 let bacChartInstance = null;
@@ -531,12 +544,15 @@ function initializeSliders() {
 
 function toggleChartExplainer() {
     const chartExplainer = document.getElementById('chart-explainer');
+    const highestBAC = document.getElementById('highest-bac');
     const drinkData = getCookie('drinkData');
     const drinks = drinkData ? JSON.parse(drinkData) : {};
 
     if (Object.keys(drinks).length > 0) {
         chartExplainer.classList.remove('hidden');
+        highestBAC.classList.remove('hidden');
     } else {
         chartExplainer.classList.add('hidden');
+        highestBAC.classList.add('hidden');
     }
 }
