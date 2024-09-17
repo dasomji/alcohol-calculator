@@ -19,7 +19,7 @@ function closePopup(popupId) {
     popup.classList.remove('active');
 }
 
-function saveDrink(hour, drinkType, percentAlcohol, quantity) {
+async function saveDrink(hour, drinkType, percentAlcohol, quantity) {
     let drinkData = getCookie('drinkData');
     drinkData = drinkData ? JSON.parse(drinkData) : {};
     if (!drinkData[hour]) {
@@ -28,7 +28,7 @@ function saveDrink(hour, drinkType, percentAlcohol, quantity) {
     drinkData[hour].push({ drinkType, percentAlcohol, quantity });
     document.cookie = `drinkData=${JSON.stringify(drinkData)}; path=/;`;
     closePopup('drink-popup');
-    updateClockDisplay();
+    await updateClockDisplay();
     calculateBAC();
     toggleChartExplainer();
 }
@@ -119,56 +119,59 @@ function updateUserInfoDisplay() {
 }
 
 function updateClockDisplay() {
-    const drinkData = getCookie('drinkData');
-    if (drinkData) {
-        const data = JSON.parse(drinkData);
-        const clockContainer = document.getElementById('clock');
+    return new Promise((resolve) => {
+        const drinkData = getCookie('drinkData');
+        if (drinkData) {
+            const data = JSON.parse(drinkData);
+            const clockContainer = document.getElementById('clock');
 
-        // Clear existing pictograms
-        const existingPictograms = clockContainer.querySelectorAll('.drink-group');
-        existingPictograms.forEach(pictogram => pictogram.remove());
+            // Clear existing pictograms
+            const existingPictograms = clockContainer.querySelectorAll('.drink-group');
+            existingPictograms.forEach(pictogram => pictogram.remove());
 
-        // Get the clock dimensions
-        const clockRect = clockContainer.getBoundingClientRect();
-        const clockSize = Math.min(clockRect.width, clockRect.height);
+            // Get the clock dimensions
+            const clockRect = clockContainer.getBoundingClientRect();
+            const clockSize = Math.min(clockRect.width, clockRect.height);
 
-        // Calculate the radius for positioning drinks
-        const radius = (clockSize / 2) * 1.2; // 10% outside the clock face
+            // Calculate the radius for positioning drinks
+            const radius = (clockSize / 2) * 1.2; // 10% outside the clock face
 
-        // Load drink types from drinks.json
-        fetch('drinks.json')
-            .then(response => response.json())
-            .then(drinkTypes => {
-                Object.entries(data).forEach(([hour, drinks]) => {
-                    const drinkGroup = document.createElement('div');
-                    drinkGroup.classList.add('drink-group');
+            // Load drink types from drinks.json
+            fetch('drinks.json')
+                .then(response => response.json())
+                .then(drinkTypes => {
+                    Object.entries(data).forEach(([hour, drinks]) => {
+                        const drinkGroup = document.createElement('div');
+                        drinkGroup.classList.add('drink-group');
 
-                    drinks.forEach((drink, index) => {
-                        const drinkType = drinkTypes.find(type => type.name === drink.drinkType);
-                        if (drinkType) {
-                            const pictogram = document.createElement('span');
-                            pictogram.classList.add('drink-pictogram');
-                            pictogram.textContent = drinkType.pictogram;
-                            drinkGroup.appendChild(pictogram);
-                        }
+                        drinks.forEach((drink, index) => {
+                            const drinkType = drinkTypes.find(type => type.name === drink.drinkType);
+                            if (drinkType) {
+                                const pictogram = document.createElement('span');
+                                pictogram.classList.add('drink-pictogram');
+                                pictogram.textContent = drinkType.pictogram;
+                                drinkGroup.appendChild(pictogram);
+                            }
+                        });
+
+                        // Position the drink group
+                        const angle = (parseInt(hour) - 3) * 30 * (Math.PI / 180); // Convert to radians
+                        const x = Math.cos(angle) * radius + (clockSize / 2);
+                        const y = Math.sin(angle) * radius + (clockSize / 2);
+
+                        drinkGroup.style.left = `${x}px`;
+                        drinkGroup.style.top = `${y}px`;
+                        drinkGroup.style.transform = 'translate(-50%, -50%)';
+
+                        clockContainer.appendChild(drinkGroup);
                     });
-
-                    // Position the drink group
-                    const angle = (parseInt(hour) - 3) * 30 * (Math.PI / 180); // Convert to radians
-                    const x = Math.cos(angle) * radius + (clockSize / 2);
-                    const y = Math.sin(angle) * radius + (clockSize / 2);
-
-                    drinkGroup.style.left = `${x}px`;
-                    drinkGroup.style.top = `${y}px`;
-                    drinkGroup.style.transform = 'translate(-50%, -50%)';
-
-                    clockContainer.appendChild(drinkGroup);
-                });
-            })
-            .catch(error => console.error('Error loading drink types:', error));
-    } else {
-        return;
-    }
+                })
+                .catch(error => console.error('Error loading drink types:', error))
+                .finally(() => resolve()); // Resolve the promise when done
+        } else {
+            resolve(); // Resolve immediately if there's no drink data
+        }
+    });
 }
 
 function calculateBAC() {

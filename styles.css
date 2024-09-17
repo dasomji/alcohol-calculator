@@ -9,7 +9,8 @@ body {
   background-color: #f0f0f0;
 }
 
-select, input{
+select,
+input {
   border-radius: 8px;
   border: 1px solid #ccc;
   padding: 8px;
@@ -24,7 +25,8 @@ select, input{
   gap: 20px;
 }
 
-#user-info, button {
+#user-info,
+button {
   border: none;
   display: inline-block;
   padding: 10px;
@@ -37,9 +39,9 @@ select, input{
   /* box-shadow: 20px 20px 60px #989898, -20px -20px 60px #ffffff; */
 }
 
-#clock-container{
-  width:100vw;
-  height:auto;
+#clock-container {
+  width: 100vw;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,55 +69,55 @@ select, input{
 }
 
 .clock-hand {
-    position: absolute;
-    color: #3f3f3f;
-    font-size: 0.65em;
-    width: auto;
-    height: auto;
-    left: 50%;
-    top: 50%;
-    transform-origin: top center;
-    border: 1px solid rgb(66, 66, 66);
-    border-radius: 50px;
-    cursor: default;
+  position: absolute;
+  color: #3f3f3f;
+  font-size: 0.65em;
+  width: auto;
+  height: auto;
+  left: 50%;
+  top: 50%;
+  transform-origin: top center;
+  border: 1px solid rgb(66, 66, 66);
+  border-radius: 50px;
+  cursor: default;
 }
 
-.middle-dot{
-    border-radius: 50px;
-    width: 4%;
-    height: 4%;
-    translate: -50% -50%;
-    background-color: #3f3f3f;
+.middle-dot {
+  border-radius: 50px;
+  width: 4%;
+  height: 4%;
+  translate: -50% -50%;
+  background-color: #3f3f3f;
 }
 .left-hand {
-    translate: -122% -50%;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
+  translate: -122% -50%;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 }
 
 .right-hand {
-    writing-mode: vertical-rl;
-    transform: rotate(240deg);
-    translate: 30% -4px;
-    padding-left: 1px;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
+  writing-mode: vertical-rl;
+  transform: rotate(240deg);
+  translate: 30% -4px;
+  padding-left: 1px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 }
 
 :nth-child(1) {
-  --nth-child: 1 ;
+  --nth-child: 1;
 }
 
 :nth-child(2) {
-  --nth-child: 2 ;
+  --nth-child: 2;
 }
 
 :nth-child(3) {
-  --nth-child: 3 ;
+  --nth-child: 3;
 }
 
 :nth-child(4) {
-  --nth-child: 4 ;
+  --nth-child: 4;
 }
 
 :nth-child(5) {
@@ -123,31 +125,31 @@ select, input{
 }
 
 :nth-child(6) {
-  --nth-child: 6 ;
+  --nth-child: 6;
 }
 
 :nth-child(7) {
-  --nth-child: 7 ;
+  --nth-child: 7;
 }
 
 :nth-child(8) {
-  --nth-child: 8 ;
+  --nth-child: 8;
 }
 
 :nth-child(9) {
-  --nth-child: 9 ;
+  --nth-child: 9;
 }
 
 :nth-child(10) {
-  --nth-child: 10 ;
+  --nth-child: 10;
 }
 
 :nth-child(11) {
-  --nth-child: 11 ;
+  --nth-child: 11;
 }
 
 :nth-child(12) {
-  --nth-child: 12 ;
+  --nth-child: 12;
 }
 
 .clock-number {
@@ -165,7 +167,8 @@ select, input{
   height: 10%;
   /* background-color: white; */
   border-radius: 100%;
-  transform: rotateZ(calc((var(--nth-child) + 6) * 30 * 1deg)) translateY(400%) rotateZ(calc((var(--nth-child) + 6) * 30 * -1deg));
+  transform: rotateZ(calc((var(--nth-child) + 6) * 30 * 1deg)) translateY(400%)
+    rotateZ(calc((var(--nth-child) + 6) * 30 * -1deg));
 }
 
 #bac-bar {
@@ -219,18 +222,18 @@ select, input{
 }
 
 #drinks-container {
-    display: flex;
-    max-width: 100%;
-    flex-flow: row wrap;
-    gap: 10px;
-    justify-content: center;
+  display: flex;
+  max-width: 100%;
+  flex-flow: row wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
-.popup{
+.popup {
   border-radius: 8px;
 }
 
-#drink-popup-content{
+#drink-popup-content {
   display: flex;
   flex-flow: column;
   border-radius: 8px;
@@ -239,57 +242,54 @@ select, input{
 }
 
 .drink-option {
-    width: 30%;
-    height: auto;
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    background-size: cover;
-    background-position: center;
-    border: 1px solid black;
-    border-radius: 8px;
-    overflow: hidden;
-    padding-bottom: 8px;
-    gap: 8px;
+  width: 30%;
+  height: auto;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid black;
+  border-radius: 8px;
+  overflow: hidden;
+  padding-bottom: 8px;
+  gap: 8px;
 }
 
-
-.drink-option img{
-    width: 100%;
-    height: auto;
+.drink-option img {
+  width: 100%;
+  height: auto;
 }
 
 .drink-info {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    gap: 4px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .drink-info p {
-    font-size: 0.8rem;
-    margin: 0;
+  font-size: 0.8rem;
+  margin: 0;
 }
 
 #bacChart {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
 #bacChart-container {
-    width: 100%;
-    max-width: 900px;
+  width: 100%;
+  max-width: 900px;
 }
-
-
 
 .drink-group {
   position: absolute;
   display: flex;
   flex-flow: row wrap;
-  width:50px;
+  width: 50px;
   justify-content: flex-start;
   align-items: center;
   translate: 4px -12px;
@@ -306,7 +306,7 @@ select, input{
 } */
 
 .drink-pictogram {
-  font-size: 18px;
+  font-size: min(1rem, 3vw);
   margin: 2px;
 }
 
@@ -321,14 +321,14 @@ select, input{
   border-radius: 8px;
   text-align: left;
 }
-#mobile-popup .popup-content{
+#mobile-popup .popup-content {
   display: flex;
   flex-flow: column;
   align-items: flex-start;
   justify-content: center;
 }
 
-#mobile-popup .popup-content span{
+#mobile-popup .popup-content span {
   align-self: flex-end;
 }
 
@@ -339,59 +339,59 @@ select, input{
 /* Add these styles at the end of your existing CSS file */
 
 .number-input {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .slider-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 input[type="range"] {
-    flex-grow: 1;
-    appearance: none;
-    -webkit-appearance: none;
-    width: 100%;
-    height: 10px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    outline: none;
+  flex-grow: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
 }
 
 input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #214f74, #e6e6e6);
-    cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #214f74, #e6e6e6);
+  cursor: pointer;
 }
 
 input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #214f74, #e6e6e6);
-    cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #214f74, #e6e6e6);
+  cursor: pointer;
 }
 
 input[type="number"] {
-    width: 60px;
-    text-align: center;
+  width: 60px;
+  text-align: center;
 }
 
 #user-info-popup form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 #user-info-popup select,
 #user-info-popup button {
-    padding: 10px;
-    font-size: 16px;
+  padding: 10px;
+  font-size: 16px;
 }
 
 #chart-explainer {
