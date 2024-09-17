@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateClockDisplay();
     calculateBAC();
     initializeSliders();
+    toggleChartExplainer();
 });
 
 function openUserInfoPopup() {
@@ -29,12 +30,14 @@ function saveDrink(hour, drinkType, percentAlcohol, quantity) {
     closePopup('drink-popup');
     updateClockDisplay();
     calculateBAC();
+    toggleChartExplainer();
 }
 
 function clearCookie() {
-    document.cookie = "userData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "drinkData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    location.reload();
+    toggleChartExplainer();
+    updateClockDisplay();
+    calculateBAC();
 }
 
 let selectedHour = null;
@@ -163,6 +166,8 @@ function updateClockDisplay() {
                 });
             })
             .catch(error => console.error('Error loading drink types:', error));
+    } else {
+        return;
     }
 }
 
@@ -171,7 +176,8 @@ function calculateBAC() {
     const drinkData = getCookie('drinkData');
     if (!userData || !drinkData) {
         console.log('No user data or drink data found.');
-        return 0;
+        updateBACTable([]); // Update the chart with empty data
+        return;
     }
 
     const { gender, weight, height, age } = JSON.parse(userData);
@@ -243,6 +249,14 @@ async function loadPromillDescriptions() {
 }
 
 function updateBACTable(bacTable) {
+    if (bacTable.length === 0) {
+        // Clear the existing chart if there's no data
+        if (bacChartInstance) {
+            bacChartInstance.destroy();
+            bacChartInstance = null;
+        }
+        return;
+    }
     // Find the first and last index where BAC > 0
     let firstIndex = bacTable.findIndex(entry => entry.bac > 0);
     let lastIndex = bacTable.length - 1 - [...bacTable].reverse().findIndex(entry => entry.bac > 0);
@@ -428,12 +442,6 @@ function updateBACTable(bacTable) {
     }
 }
 
-function clearCookie() {
-    document.cookie = "userData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie = "drinkData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    location.reload();
-}
-
 function selectDrink(drink) {
     saveDrink(selectedHour, drink.name, drink.percentAlcohol, drink.volume);
     closePopup('drink-popup');
@@ -515,4 +523,16 @@ function initializeSliders() {
         });
     });
     console.log("initialised")
+}
+
+function toggleChartExplainer() {
+    const chartExplainer = document.getElementById('chart-explainer');
+    const drinkData = getCookie('drinkData');
+    const drinks = drinkData ? JSON.parse(drinkData) : {};
+
+    if (Object.keys(drinks).length > 0) {
+        chartExplainer.classList.remove('hidden');
+    } else {
+        chartExplainer.classList.add('hidden');
+    }
 }
