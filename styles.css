@@ -294,25 +294,15 @@ button {
   position: absolute;
   display: flex;
   flex-flow: row wrap;
-  width: 50px;
-  justify-content: flex-start;
-  align-items: center;
-  translate: 4px -12px;
-}
-
-/* .drink-group {
-  position: absolute;
-  display: flex;
-  flex-flow: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   max-width: 60px;
   max-height: 60px;
-} */
+}
 
 .drink-pictogram {
-  font-size: min(1rem, 3vw);
-  margin: 2px;
+  font-size: min(1rem, 2.5vw);
+  margin: 1px;
 }
 
 #desktop-tooltip {

@@ -136,7 +136,7 @@ function updateClockDisplay() {
             const clockSize = Math.min(clockRect.width, clockRect.height);
 
             // Calculate the radius for positioning drinks
-            const radius = (clockSize / 2) * 1.2; // 10% outside the clock face
+            const radius = (clockSize / 2) * 1.3; // 30% outside the clock face
 
             // Load drink types from drinks.json
             fetch('drinks.json')
@@ -169,9 +169,9 @@ function updateClockDisplay() {
                     });
                 })
                 .catch(error => console.error('Error loading drink types:', error))
-                .finally(() => resolve()); // Resolve the promise when done
+                .finally(() => resolve());
         } else {
-            resolve(); // Resolve immediately if there's no drink data
+            resolve();
         }
     });
 }
