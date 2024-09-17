@@ -57,6 +57,7 @@ function saveUserInfo() {
     document.cookie = `userData=${JSON.stringify(userInfo)}; path=/;`;
     closePopup('user-info-popup');
     updateUserInfoDisplay();
+    loadDrinkOptions();
 }
 
 function getCookie(name) {
@@ -464,6 +465,29 @@ function selectDrink(drink) {
     closePopup('drink-popup');
 }
 
+function calculateBACIncrease(drink) {
+    const userData = getCookie('userData');
+    if (!userData) {
+        console.log('No user data found.');
+        return 0;
+    }
+
+    const { gender, weight, height, age } = JSON.parse(userData);
+    let r;
+    let TBW;
+
+    if (gender === 'male') {
+        TBW = 2.447 - 0.09156 * age + 0.1074 * height + 0.3362 * weight;
+    } else {
+        TBW = -2.097 + 0.1069 * height + 0.2466 * weight;
+    }
+    r = TBW / weight;
+
+    const alcoholMass = (drink.volume * 0.001 * drink.percentAlcohol * 0.789) / 100;
+    const bacIncrease = (alcoholMass / (r * weight)) * 1000 * 0.8;
+
+    return bacIncrease;
+}
 
 async function loadDrinkOptions() {
     try {
@@ -471,6 +495,8 @@ async function loadDrinkOptions() {
         const drinks = await response.json();
 
         const drinkPopup = document.getElementById('drinks-container');
+        drinkPopup.innerHTML = ''; // Clear existing content
+
         drinks.forEach(drink => {
             const drinkDiv = document.createElement('div');
             drinkDiv.classList.add('drink-option');
@@ -484,16 +510,23 @@ async function loadDrinkOptions() {
             drinkInfoDiv.classList.add('drink-info');
             const drinkName = document.createElement('p');
             drinkName.textContent = drink.name;
+            drinkName.id = 'drink-name';
             const drinkDetails = document.createElement('p');
             drinkDetails.textContent = `${drink.percentAlcohol}%, ${drink.volume}ml`;
 
+            const bacIncrease = calculateBACIncrease(drink);
+            const bacIncreaseP = document.createElement('p');
+            bacIncreaseP.textContent = `+${bacIncrease.toFixed(3)}‰`;
+            bacIncreaseP.classList.add('bac-increase');
+
             drinkInfoDiv.appendChild(drinkName);
             drinkInfoDiv.appendChild(drinkDetails);
+            drinkInfoDiv.appendChild(bacIncreaseP);
 
             drinkDiv.appendChild(drinkImage);
             drinkDiv.appendChild(drinkInfoDiv);
 
-            drinkPopup.insertBefore(drinkDiv, drinkPopup.lastElementChild);
+            drinkPopup.appendChild(drinkDiv);
         });
     } catch (error) {
         console.error('Error loading drink options:', error);

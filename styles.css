@@ -39,6 +39,10 @@ button {
   /* box-shadow: 20px 20px 60px #989898, -20px -20px 60px #ffffff; */
 }
 
+.clear-button {
+  background: linear-gradient(112deg, #b28888, #c1b0b0);
+}
+
 #clock-container {
   width: 100vw;
   height: auto;
@@ -401,4 +405,12 @@ input[type="number"] {
 
 .hidden {
   display: none;
+}
+
+.bac-increase {
+  margin-top: 5px;
+}
+
+#drink-name {
+  font-weight: bold;
 }
