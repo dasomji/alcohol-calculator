@@ -20,21 +20,20 @@ function closePopup(popupId) {
 }
 
 async function saveDrink(hour, drinkType, percentAlcohol, quantity) {
-    let drinkData = getCookie('drinkData');
-    drinkData = drinkData ? JSON.parse(drinkData) : {};
+    let drinkData = JSON.parse(localStorage.getItem('drinkData') || '{}');
     if (!drinkData[hour]) {
         drinkData[hour] = [];
     }
     drinkData[hour].push({ drinkType, percentAlcohol, quantity });
-    document.cookie = `drinkData=${JSON.stringify(drinkData)}; path=/;`;
+    localStorage.setItem('drinkData', JSON.stringify(drinkData));
     closePopup('drink-popup');
-    await updateClockDisplay();
+    updateClockDisplay();
     calculateBAC();
     toggleChartExplainer();
 }
 
-function clearCookie() {
-    document.cookie = "drinkData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+function clearDrinkData() {
+    localStorage.removeItem('drinkData');
     toggleChartExplainer();
     updateClockDisplay();
     calculateBAC();
@@ -95,7 +94,7 @@ function loadUserData() {
 }
 
 function loadDrinkData() {
-    const drinkData = getCookie('drinkData');
+    const drinkData = localStorage.getItem('drinkData');
     if (drinkData) {
         updateClockDisplay();
     }
@@ -132,7 +131,7 @@ function updateClockDisplay() {
         const existingPictograms = clockContainer.querySelectorAll('.drink-group');
         existingPictograms.forEach(pictogram => pictogram.remove());
 
-        const drinkData = getCookie('drinkData');
+        const drinkData = localStorage.getItem('drinkData');
         if (drinkData) {
             const data = JSON.parse(drinkData);
 
@@ -193,8 +192,8 @@ function updateClockDisplay() {
 }
 
 function calculateBAC() {
-    const userData = getCookie('userData');
-    const drinkData = getCookie('drinkData');
+    const userData = localStorage.getItem('userData');
+    const drinkData = localStorage.getItem('drinkData');
     if (!userData || !drinkData) {
         console.log('No user data or drink data found.');
         updateBACTable([]);
@@ -426,7 +425,7 @@ function updateBACTable(bacTable) {
     });
 
     // Render drink pictograms on the chart
-    const drinkData = getCookie('drinkData');
+    const drinkData = localStorage.getItem('drinkData');
     if (drinkData) {
         const drinks = JSON.parse(drinkData);
 
@@ -482,7 +481,7 @@ function selectDrink(drink) {
 }
 
 function calculateBACIncrease(drink) {
-    const userData = getCookie('userData');
+    const userData = localStorage.getItem('userData');
     if (!userData) {
         console.log('No user data found.');
         return 0;
@@ -594,7 +593,7 @@ function initializeSliders() {
 function toggleChartExplainer() {
     const chartExplainer = document.getElementById('chart-explainer');
     const highestBAC = document.getElementById('highest-bac');
-    const drinkData = getCookie('drinkData');
+    const drinkData = localStorage.getItem('drinkData');
     const drinks = drinkData ? JSON.parse(drinkData) : {};
 
     if (Object.keys(drinks).length > 0) {
