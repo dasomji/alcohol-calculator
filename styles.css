@@ -436,3 +436,7 @@ input[type="number"] {
 #drink-list button:hover {
   background-color: #ff1a1a;
 }
+
+#qrcode {
+  margin-top: 20px;
+}

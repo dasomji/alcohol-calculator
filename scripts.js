@@ -646,3 +646,18 @@ function toggleChartExplainer() {
         highestBAC.classList.add('hidden');
     }
 }
+
+// Generate QR code
+function generateQRCode() {
+    const qrcodeContainer = document.getElementById('qrcode');
+    qrcodeContainer.innerHTML = ''; // Clear previous QR code
+
+    new QRCode(qrcodeContainer, {
+        text: window.location.href,
+        width: 128,
+        height: 128
+    });
+}
+
+// Call this function when the page loads
+window.addEventListener('load', generateQRCode);
