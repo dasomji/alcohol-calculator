@@ -299,6 +299,7 @@ button {
   align-items: center;
   max-width: 60px;
   max-height: 60px;
+  cursor: pointer;
 }
 
 .drink-pictogram {
@@ -405,4 +406,33 @@ input[type="number"] {
 
 #drink-name {
   font-weight: bold;
+}
+
+#drink-list-modal .popup-content {
+  max-width: 300px;
+}
+
+#drink-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#drink-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#drink-list button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#drink-list button:hover {
+  background-color: #ff1a1a;
 }
