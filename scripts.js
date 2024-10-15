@@ -50,11 +50,11 @@ function openDrinkPopup(hour) {
 
 function saveUserInfo() {
     const gender = document.getElementById('gender').value;
-    const weight = document.getElementById('weight').value;
-    const height = document.getElementById('height').value;
-    const age = document.getElementById('age').value;
+    const weight = Number(document.getElementById('weight').value);
+    const height = Number(document.getElementById('height').value);
+    const age = Number(document.getElementById('age').value);
     const userInfo = { gender, weight, height, age };
-    document.cookie = `userData=${JSON.stringify(userInfo)}; path=/;`;
+    localStorage.setItem('userData', JSON.stringify(userInfo));
     closePopup('user-info-popup');
     updateUserInfoDisplay();
     loadDrinkOptions();
@@ -66,8 +66,12 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
+function getLocalStorage(key) {
+    return localStorage.getItem(key);
+}
+
 function loadUserData() {
-    let userData = getCookie('userData');
+    let userData = getLocalStorage('userData');
     if (!userData) {
         // Set default values
         userData = JSON.stringify({
@@ -76,7 +80,7 @@ function loadUserData() {
             height: 150,
             age: 14
         });
-        document.cookie = `userData=${userData}; path=/;`;
+        localStorage.setItem('userData', userData);
     }
 
     const { gender, weight, height, age } = JSON.parse(userData);
@@ -98,7 +102,7 @@ function loadDrinkData() {
 }
 
 function updateUserInfoDisplay() {
-    const userData = getCookie('userData');
+    const userData = getLocalStorage('userData');
     if (userData) {
         const { gender, weight, height, age } = JSON.parse(userData);
         let displayGender;
