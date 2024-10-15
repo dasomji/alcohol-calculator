@@ -9,6 +9,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
+    <header>
+        <button id="menu-toggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+    <nav id="slide-menu">
+        <ul>
+            <li><a href="#" class="active">Promill-Rechner</a></li>
+            <li><a href="#">Für Lehrer:innen & Trainer</a></li>
+            <li><a href="#">Über</a></li>
+        </ul>
+        <div id="qrcode"></div>
+    </nav>
     <h1>Promill-Rechner</h1>
     <div id="user-info-container">
         <div id="user-info" onclick="openUserInfoPopup()">
@@ -109,8 +124,6 @@
             <div id="mobile-popup-content"></div>
         </div>
     </div>
-
-    <div id="qrcode"></div>
     <script src="scripts.js"></script>
 </body>
 </html>

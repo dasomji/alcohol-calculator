@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     calculateBAC();
     initializeSliders();
     toggleChartExplainer();
+    initializeMenu();
 });
 
 function openUserInfoPopup() {
@@ -661,3 +662,22 @@ function generateQRCode() {
 
 // Call this function when the page loads
 window.addEventListener('load', generateQRCode);
+
+function initializeMenu() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const slideMenu = document.getElementById('slide-menu');
+
+    menuToggle.addEventListener('click', () => {
+        slideMenu.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!slideMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+            slideMenu.classList.remove('active');
+        }
+    });
+
+    // Generate QR code for the menu
+    generateMenuQRCode();
+}
