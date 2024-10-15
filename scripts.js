@@ -651,24 +651,29 @@ function toggleChartExplainer() {
 // Generate QR code
 function generateQRCode() {
     const qrcodeContainer = document.getElementById('qrcode');
-    qrcodeContainer.innerHTML = ''; // Clear previous QR code
+    if (qrcodeContainer.firstChild) {
+        return; // QR code already exists, no need to regenerate
+    }
 
+    const rootUrl = window.location.origin; // Get the root URL
     new QRCode(qrcodeContainer, {
-        text: window.location.href,
+        text: rootUrl,
         width: 128,
         height: 128
     });
 }
 
-// Call this function when the page loads
-window.addEventListener('load', generateQRCode);
-
 function initializeMenu() {
     const menuToggle = document.getElementById('menu-toggle');
     const slideMenu = document.getElementById('slide-menu');
+    let qrCodeGenerated = false;
 
     menuToggle.addEventListener('click', () => {
         slideMenu.classList.toggle('active');
+        if (!qrCodeGenerated) {
+            generateQRCode();
+            qrCodeGenerated = true;
+        }
     });
 
     // Close menu when clicking outside
@@ -677,7 +682,4 @@ function initializeMenu() {
             slideMenu.classList.remove('active');
         }
     });
-
-    // Generate QR code for the menu
-    generateMenuQRCode();
 }

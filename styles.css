@@ -527,11 +527,14 @@ input[type="number"] {
 /*---------- QR Code ----------*/
 #qrcode {
   margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /*---------- Media Queries ----------*/
 @media (min-width: 601px) {
   #slide-menu {
-    width: 600px;
+    width: 400px;
   }
 }
