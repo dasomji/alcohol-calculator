@@ -14,9 +14,9 @@
         "description": "First restrictions in field of vision, problems with distance estimation."
     },
     {
-        "title": "From 0.05% BAC (mild intoxication)",
+        "title": "From 0.05% BAC",
         "promill": 0.8,
-        "description": "Significant decrease in reaction ability, especially to red signals (red light weakness), reduced concentration ability, impaired hearing, increased irritability."
+        "description": "Mild intoxication, <br> Significant decrease in reaction ability, <br> especially to red signals (red light weakness), <br> reduced concentration ability, <br> impaired hearing, <br> increased irritability."
     },
     {
         "title": "From 0.08% BAC",
@@ -29,9 +29,9 @@
         "description": "Significant speech disorders, risk-taking behavior and aggressiveness continue to increase."
     },
     {
-        "title": "From 0.15% BAC (severe intoxication)",
+        "title": "From 0.15% BAC",
         "promill": 2.5,
-        "description": "Loss of reality perception, mood swings, severe coordination disorders, balance disorders, orientation disorders, slurred speech."
+        "description": "Severe intoxication, <br> Loss of reality perception, <br> mood swings, <br> severe coordination disorders, <br> balance disorders, <br> orientation disorders, <br> slurred speech."
     },
     {
         "title": "From 0.25% BAC",

@@ -202,11 +202,18 @@
       </div>
     </div>
 
-    <div id="desktop-tooltip"></div>
-    <div id="mobile-popup" class="popup">
+    <div id="desktop-info"></div>
+    <div id="mobile-info-popup" class="popup">
       <div class="popup-content">
-        <span class="close-btn" onclick="closeMobilePopup()">&times;</span>
-        <div id="mobile-popup-content"></div>
+        <div class="mobile-info-popup-header">
+          <h3 id="mobile-info-popup-title" class="mobile-info-popup-title">
+            Alkoholgehalt
+          </h3>
+          <span class="close-btn" onclick="closeMobileInfoPopup()"
+            >&times;</span
+          >
+        </div>
+        <div id="mobile-info-popup-content"></div>
       </div>
     </div>
     <script type="module" src="src/main.js"></script>

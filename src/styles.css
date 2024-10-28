@@ -317,8 +317,12 @@ button {
 }
 
 .drink-pictogram {
-  font-size: min(1rem, 2.5vw);
+  font-size: min(1rem, 2vw);
   margin: 1px;
+}
+
+.drink-group .drink-pictogram {
+  font-size: min(2rem, 3.3vw);
 }
 
 /*---------- BAC Chart ----------*/
@@ -527,7 +531,7 @@ input[type="number"] {
 }
 
 /*---------- Desktop Tooltip ----------*/
-#desktop-tooltip {
+#desktop-info {
   display: none;
   position: absolute;
   background: white;
@@ -539,20 +543,36 @@ input[type="number"] {
   text-align: left;
 }
 
+#desktop-info p {
+  line-height: 1.6;
+}
+
 /*---------- Mobile Popup ----------*/
-#mobile-popup .popup-content {
+.mobile-info-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.mobile-info-popup-title {
+  margin: 0;
+}
+
+#mobile-info-popup .popup-content {
   display: flex;
   flex-flow: column;
   align-items: flex-start;
   justify-content: center;
 }
 
-#mobile-popup .popup-content span {
+#mobile-info-popup .popup-content span {
   align-self: flex-end;
 }
 
-#mobile-popup-content {
+#mobile-info-popup-content {
   text-align: left;
+  line-height: 1.6;
 }
 
 /*---------- QR Code ----------*/

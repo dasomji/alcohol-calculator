@@ -1,23 +1,22 @@
-[
-  {
+[{
     "title": "Bis 0,2 Promille",
     "promill": 0.2,
-    "description": "Bei Menschen, die sehr empfindlich gegenüber Alkohol sind oder den Konsum nicht gewohnt sind, tritt bereits eine enthemmende Wirkung ein. Die Redseligkeit steigt damit ebenfalls."
+    "description": "Enthemmende Wirkung ein. <br> Die Redseligkeit steigt damit ebenfalls."
   },
   {
     "title": "Ab 0,2 Promille",
     "promill": 0.3,
-    "description": "Verlangsamte Reaktionen, verminderte Koordination von Bewegungen, weniger empfänglich für Kritik, erhöhte Risikobereitschaft, Distanzlosigkeit."
+    "description": "Verlangsamte Reaktionen, <br> verminderte Koordination von Bewegungen, <br> weniger empfänglich für Kritik, <br> erhöhte Risikobereitschaft, <br> Distanzlosigkeit."
   },
   {
     "title": "Ab 0,3 Promille",
     "promill": 0.5,
-    "description": "Erste Einschränkung des Sehfeldes, Probleme bei der Einschätzung von Entfernungen."
+    "description": "Erste Einschränkung des Sehfeldes, <br> Probleme bei der Einschätzung von Entfernungen."
   },
   {
-    "title": "Ab 0,5 Promille (leichter Rausch)",
+    "title": "Ab 0,5 Promille",
     "promill": 0.8,
-    "description": "Deutliches Nachlassen der Reaktionsfähigkeit, insbesondere auf rote Signale (Rotlichtschwäche), verminderte Konzentrationsfähigkeit, schlechteres Hörvermögen, erhöhte Reizbarkeit."
+    "description": "Leichter Rausch, <br> Deutliches Nachlassen der Reaktionsfähigkeit, <br> insbesondere auf rote Signale (Rotlichtschwäche), <br> verminderte Konzentrationsfähigkeit, <br> schlechteres Hörvermögen, <br> erhöhte Reizbarkeit."
   },
   {
     "title": "Ab 0,8 Promille",
@@ -27,22 +26,22 @@
   {
     "title": "Ab 1,0 Promille",
     "promill": 1.5,
-    "description": "Deutliche Sprachstörungen, Risikobereitschaft und Aggressivität steigen weiter."
+    "description": "Deutliche Sprachstörungen, <br> Risikobereitschaft und Aggressivität steigen weiter."
   },
   {
-    "title": "Ab 1,5 Promille (starker Rausch)",
+    "title": "Ab 1,5 Promille",
     "promill": 2.5,
-    "description": "Realitätsverkennung, Stimmungsschwankungen, schwere Koordinationsstörungen, Gleichgewichtsstörungen, Orientierungsstörungen, lallende Aussprache."
+    "description": "Starker Rausch, <br> Realitätsverkennung, <br> Stimmungsschwankungen, <br> schwere Koordinationsstörungen, <br> Gleichgewichtsstörungen, <br> Orientierungsstörungen, <br> lallende Aussprache."
   },
   {
     "title": "Ab 2,5 Promille",
     "promill": 3.0,
-    "description": "Bewusstseinstrübungen, Lähmungserscheinungen, doppeltes Sehen, Ausschalten des Erinnerungsvermögens."
+    "description": "Bewusstseinstrübungen, <br> Lähmungserscheinungen, <br> doppeltes Sehen, <br> Ausschalten des Erinnerungsvermögens."
   },
   {
     "title": "Ab 3 Promille",
     "promill": 3.5,
-    "description": "Starke Sedierung, Bewusstlosigkeit bis hin zu Koma."
+    "description": "Starke Sedierung, <br> Bewusstlosigkeit bis hin zu Koma."
   },
   {
     "title": "Ab 3,5 Promille",

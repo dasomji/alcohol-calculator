@@ -1,5 +1,4 @@
 import { getLocalStorage } from '../main.js';
-import { showMobilePopup } from './menu.js';
 import { i18n } from '../i18n/languageManager.js';
 
 let bacChartInstance = null;
@@ -222,13 +221,13 @@ export function updateBACTable(bacTable) {
                 for (let i = 0; i < datasets.length; i++) {
                     if (dataY <= datasets[i].data[Math.floor(dataX)]) {
                         if (!('ontouchstart' in window)) {
-                            showDesktopTooltip(event, promillDescriptions[i]);
+                            showDesktopInfo(event, promillDescriptions[i]);
                         }
                         return;
                     }
                 }
                 if (!('ontouchstart' in window)) {
-                    hideDesktopTooltip();
+                    hideDesktopInfo();
                 }
             },
             onClick: (event, elements) => {
@@ -240,7 +239,7 @@ export function updateBACTable(bacTable) {
 
                     for (let i = 0; i < datasets.length; i++) {
                         if (dataY <= datasets[i].data[Math.floor(dataX)]) {
-                            showMobilePopup(promillDescriptions[i]);
+                            showMobileInfoPopup(promillDescriptions[i]);
                             return;
                         }
                     }
@@ -301,16 +300,16 @@ function renderDrinkPictograms() {
     }
 }
 
-export function showDesktopTooltip(event, description) {
-    const tooltip = document.getElementById('desktop-tooltip');
+export function showDesktopInfo(event, description) {
+    const tooltip = document.getElementById('desktop-info');
     tooltip.innerHTML = `<h3>${description.title}</h3><p>${description.description}</p>`;
     tooltip.style.display = 'block';
     tooltip.style.left = `${event.clientX + 10}px`;
     tooltip.style.top = `${event.clientY + 10}px`;
 }
 
-export function hideDesktopTooltip() {
-    const tooltip = document.getElementById('desktop-tooltip');
+export function hideDesktopInfo() {
+    const tooltip = document.getElementById('desktop-info');
     tooltip.style.display = 'none';
 }
 
@@ -327,4 +326,18 @@ export function toggleChartExplainer() {
         chartExplainer.classList.add('hidden');
         highestBAC.classList.add('hidden');
     }
+}
+
+export function showMobileInfoPopup(description) {
+    const popup = document.getElementById('mobile-info-popup');
+    const popupTitle = document.getElementById('mobile-info-popup-title');
+    const popupContent = document.getElementById("mobile-info-popup-content");
+    popupTitle.textContent = `${description.title}`;
+    popupContent.innerHTML = `<p>${description.description}</p>`;
+    popup.classList.add('active');
+}
+
+export function closeMobileInfoPopup() {
+    const popup = document.getElementById('mobile-info-popup');
+    popup.classList.remove('active');
 }

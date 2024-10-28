@@ -17,11 +17,11 @@ import {
 import {
     loadPromillDescriptions,
     calculateBAC,
-    toggleChartExplainer
+    toggleChartExplainer,
+    closeMobileInfoPopup
 } from './modules/chart.js';
 
 import {
-    closeMobilePopup,
     initializeMenu
 } from './modules/menu.js';
 
@@ -120,6 +120,6 @@ Object.assign(window, {
     openDrinkPopup,
     saveUserInfo,
     clearDrinkData,
-    closeMobilePopup,
+    closeMobileInfoPopup,
     closePopup
 });
