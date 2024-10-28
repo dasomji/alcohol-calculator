@@ -1,4 +1,4 @@
-import { getLocalStorage } from './storage.js';
+import { getLocalStorage } from '../main.js';
 import { showMobilePopup } from './menu.js';
 
 let bacChartInstance = null;

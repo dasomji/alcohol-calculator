@@ -1,4 +1,4 @@
-import { getLocalStorage } from './storage.js';
+import { getLocalStorage } from '../main.js';
 import { closePopup } from './menu.js';
 import { loadDrinkOptions } from './drinks.js';
 

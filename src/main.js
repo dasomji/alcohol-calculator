@@ -1,4 +1,48 @@
-import * as storage from './modules/storage.js';
+// State management
+class AppState {
+    static instance = null;
+    selectedHour = null;
+    bacChartInstance = null;
+    promillDescriptions = null;
+
+    constructor() {
+        if (AppState.instance) {
+            return AppState.instance;
+        }
+        AppState.instance = this;
+    }
+
+    static getInstance() {
+        if (!AppState.instance) {
+            AppState.instance = new AppState();
+        }
+        return AppState.instance;
+    }
+
+    setSelectedHour(hour) {
+        this.selectedHour = hour;
+    }
+
+    getSelectedHour() {
+        return this.selectedHour;
+    }
+}
+
+// Storage utilities
+export function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+export function getLocalStorage(key) {
+    return localStorage.getItem(key);
+}
+
+// Export state instance
+export const state = AppState.getInstance();
+
+// Import other modules
 import * as user from './modules/user.js';
 import * as drinks from './modules/drinks.js';
 import * as chart from './modules/chart.js';

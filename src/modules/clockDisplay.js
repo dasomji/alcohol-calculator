@@ -1,4 +1,4 @@
-import { state } from './state.js';
+import { state } from '../main.js';
 import { deleteDrink } from './drinks.js';
 
 export function updateClockDisplay() {
