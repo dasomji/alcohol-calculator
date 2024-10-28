@@ -1,5 +1,5 @@
 import { calculateBAC, toggleChartExplainer } from './chart.js';
-import { getLocalStorage, state } from '../main.js';
+import { getLocalStorage, state, closePopup } from '../main.js';
 
 export function updateClockDisplay() {
     return new Promise((resolve) => {
@@ -65,14 +65,13 @@ export function updateClockDisplay() {
 }
 
 export function openDrinkPopup(hour) {
-    state.setSelectedHour(hour);
-    const popup = document.getElementById('drink-popup');
-    popup.classList.add('active');
-}
-
-export function closeDrinkPopup() {
-    const popup = document.getElementById('drink-popup');
-    popup.classList.remove('active');
+    if (state && typeof hour === 'number') {
+        state.setSelectedHour(hour);
+        const popup = document.getElementById('drink-popup');
+        popup.classList.add('active');
+    } else {
+        console.error('Invalid hour or state not initialized');
+    }
 }
 
 export function showDrinkListModal(hour, drinks, drinkTypes) {
@@ -108,7 +107,7 @@ export async function saveDrink(hour, drinkType, percentAlcohol, quantity) {
     }
     drinkData[hour].push({ drinkType, percentAlcohol, quantity });
     localStorage.setItem('drinkData', JSON.stringify(drinkData));
-    closeDrinkPopup();
+    closePopup('drink-popup');
     await updateClockDisplay();
     calculateBAC();
     toggleChartExplainer();
@@ -131,7 +130,7 @@ export function loadDrinkData() {
 export function selectDrink(drink) {
     const hour = state.getSelectedHour();
     saveDrink(hour, drink.name, drink.percentAlcohol, drink.volume);
-    closeDrinkPopup();
+    closePopup('drink-popup');
 }
 
 export async function loadDrinkOptions() {
@@ -214,7 +213,7 @@ export function deleteDrink(hour, index) {
 
     if (drinkData[hour].length === 0) {
         delete drinkData[hour];
-        closeDrinkPopup("drink-list-modal");
+        closePopup("drink-list-modal");
         return
     }
     // Refresh the modal

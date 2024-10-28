@@ -1,28 +1,37 @@
 // Import other modules
-import * as user from './modules/user.js';
-import * as drinkingClock from './modules/drinkingClock.js';
-import * as chart from './modules/chart.js';
-import * as menu from './modules/menu.js';
+import {
+    loadUserData,
+    initializeSliders,
+    openUserInfoPopup,
+    saveUserInfo
+} from './modules/user.js';
 
-// State management
+import {
+    loadDrinkData,
+    loadDrinkOptions,
+    updateClockDisplay,
+    openDrinkPopup,
+    clearDrinkData
+} from './modules/drinkingClock.js';
+
+import {
+    loadPromillDescriptions,
+    calculateBAC,
+    toggleChartExplainer
+} from './modules/chart.js';
+
+import {
+    closeMobilePopup,
+    initializeMenu
+} from './modules/menu.js';
+
 class AppState {
-    static instance = null;
-    selectedHour = null;
-    bacChartInstance = null;
-    promillDescriptions = null;
+    static #instance = null;
 
     constructor() {
-        if (AppState.instance) {
-            return AppState.instance;
-        }
-        AppState.instance = this;
-    }
-
-    static getInstance() {
-        if (!AppState.instance) {
-            AppState.instance = new AppState();
-        }
-        return AppState.instance;
+        this.selectedHour = null;
+        this.bacChartInstance = null;
+        this.promillDescriptions = null;
     }
 
     setSelectedHour(hour) {
@@ -32,59 +41,82 @@ class AppState {
     getSelectedHour() {
         return this.selectedHour;
     }
+
+    static getInstance() {
+        if (!AppState.#instance) {
+            AppState.#instance = new AppState();
+        }
+        return AppState.#instance;
+    }
 }
 
 // Storage utilities
-export function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
+const storage = {
+    getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        return parts.length === 2 ? parts.pop().split(';').shift() : null;
+    },
+
+    getLocalStorage(key) {
+        return localStorage.getItem(key);
+    }
+};
+
+// Initialize application components
+async function initializeApp() {
+    await initializeChart();
+    initializeUser();
+    initializeDrinkingClock();
+    initializeMenu();
+    initializeEventListeners();
 }
 
-export function getLocalStorage(key) {
-    return localStorage.getItem(key);
+async function initializeChart() {
+    await loadPromillDescriptions();
+    calculateBAC();
+    toggleChartExplainer();
 }
 
-// Export state instance
-export const state = AppState.getInstance();
-
-
-
-// Shared state
-export let selectedHour = null;
-export let bacChartInstance = null;
-export let promillDescriptions = null;
-
-// Generic popup close function that can be used by any module
-export function closePopup(popupId) {
-    const popup = document.getElementById(popupId);
-    popup.classList.remove('active');
+function initializeUser() {
+    loadUserData();
+    initializeSliders();
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    await chart.loadPromillDescriptions();
-    user.loadUserData();
-    drinkingClock.loadDrinkData();
-    drinkingClock.loadDrinkOptions();
-    drinkingClock.updateClockDisplay();
-    chart.calculateBAC();
-    user.initializeSliders();
-    chart.toggleChartExplainer();
-    menu.initializeMenu();
+function initializeDrinkingClock() {
+    loadDrinkData();
+    loadDrinkOptions();
+    updateClockDisplay();
+}
 
-    // Add event listeners to clock numbers
+function initializeEventListeners() {
     document.querySelectorAll('.clock-number').forEach(element => {
         element.addEventListener('click', (e) => {
             const hour = parseInt(e.target.textContent);
-            drinkingClock.openDrinkPopup(hour);
+            openDrinkPopup(hour);
         });
     });
-});
+}
 
-// Make necessary functions available to the global scope for HTML event handlers
-window.openUserInfoPopup = user.openUserInfoPopup;
-window.openDrinkPopup = drinkingClock.openDrinkPopup;
-window.saveUserInfo = user.saveUserInfo;
-window.clearDrinkData = drinkingClock.clearDrinkData;
-window.closeMobilePopup = menu.closeMobilePopup;
-window.closePopup = closePopup;
+// Generic popup close function
+function closePopup(popupId) {
+    document.getElementById(popupId)?.classList.remove('active');
+}
+
+// Initialize app when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+// Export necessary functions and objects
+export const state = AppState.getInstance();
+export const { getCookie, getLocalStorage } = storage;
+export { closePopup };
+
+// Global scope assignments for HTML event handlers
+Object.assign(window, {
+    openUserInfoPopup,
+    openDrinkPopup,
+    saveUserInfo,
+    clearDrinkData,
+    closeMobilePopup,
+    closePopup
+});
