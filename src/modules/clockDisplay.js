@@ -1,4 +1,5 @@
-import { showDrinkListModal } from './ui.js';
+import { state } from './state.js';
+import { deleteDrink } from './drinks.js';
 
 export function updateClockDisplay() {
     return new Promise((resolve) => {
@@ -61,4 +62,41 @@ export function updateClockDisplay() {
             resolve();
         }
     });
+}
+
+export function openDrinkPopup(hour) {
+    state.setSelectedHour(hour);
+    const popup = document.getElementById('drink-popup');
+    popup.classList.add('active');
+}
+
+export function closeDrinkPopup() {
+    const popup = document.getElementById('drink-popup');
+    popup.classList.remove('active');
+}
+
+export function showDrinkListModal(hour, drinks, drinkTypes) {
+    const modal = document.getElementById('drink-list-modal');
+    const timeSpan = document.getElementById('drink-list-time');
+    const drinkList = document.getElementById('drink-list');
+
+    timeSpan.textContent = `${hour}:00`;
+    drinkList.innerHTML = '';
+
+    drinks.forEach((drink, index) => {
+        const drinkType = drinkTypes.find(type => type.name === drink.drinkType);
+        if (drinkType) {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${drinkType.name} ${drinkType.pictogram}`;
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.onclick = () => deleteDrink(hour, index);
+
+            listItem.appendChild(deleteButton);
+            drinkList.appendChild(listItem);
+        }
+    });
+
+    modal.classList.add('active');
 }

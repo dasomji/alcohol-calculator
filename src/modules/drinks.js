@@ -1,8 +1,9 @@
 import { updateClockDisplay } from './clockDisplay.js';
 import { calculateBAC } from './chart.js';
-import { toggleChartExplainer } from './ui.js';
+import { toggleChartExplainer } from './chart.js';
 import { getLocalStorage } from './storage.js';
 import { state } from './state.js';
+import { closePopup } from './menu.js';
 
 export async function saveDrink(hour, drinkType, percentAlcohol, quantity) {
     let drinkData = JSON.parse(localStorage.getItem('drinkData') || '{}');

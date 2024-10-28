@@ -1,4 +1,6 @@
 import { getLocalStorage } from './storage.js';
+import { closePopup } from './menu.js';
+import { loadDrinkOptions } from './drinks.js';
 
 export function saveUserInfo() {
     const gender = document.getElementById('gender').value;
@@ -56,4 +58,30 @@ export function updateUserInfoDisplay() {
         }
         document.getElementById('user-info').innerText = `${displayGender} / ${weight}kg / ${height}cm / ${age} Jahre`;
     }
+}
+
+export function openUserInfoPopup() {
+    const popup = document.getElementById('user-info-popup');
+    popup.classList.add('active');
+}
+
+export function closeUserInfoPopup() {
+    const popup = document.getElementById('user-info-popup');
+    popup.classList.remove('active');
+}
+
+export function initializeSliders() {
+    const sliders = ['weight', 'height', 'age'];
+    sliders.forEach(slider => {
+        const rangeInput = document.getElementById(`${slider}-slider`);
+        const numberInput = document.getElementById(slider);
+
+        rangeInput.addEventListener('input', () => {
+            numberInput.value = rangeInput.value;
+        });
+
+        numberInput.addEventListener('input', () => {
+            rangeInput.value = numberInput.value;
+        });
+    });
 }

@@ -1,5 +1,5 @@
 import { getLocalStorage } from './storage.js';
-import { showDesktopTooltip, hideDesktopTooltip, showMobilePopup } from './ui.js';
+import { showMobilePopup } from './menu.js';
 
 let bacChartInstance = null;
 let promillDescriptions = null;
@@ -284,5 +284,33 @@ function renderDrinkPictograms() {
             });
     } else {
         console.log('No drink data found');
+    }
+}
+
+export function showDesktopTooltip(event, description) {
+    const tooltip = document.getElementById('desktop-tooltip');
+    tooltip.innerHTML = `<h3>${description.title}</h3><p>${description.description}</p>`;
+    tooltip.style.display = 'block';
+    tooltip.style.left = `${event.clientX + 10}px`;
+    tooltip.style.top = `${event.clientY + 10}px`;
+}
+
+export function hideDesktopTooltip() {
+    const tooltip = document.getElementById('desktop-tooltip');
+    tooltip.style.display = 'none';
+}
+
+export function toggleChartExplainer() {
+    const chartExplainer = document.getElementById('chart-explainer');
+    const highestBAC = document.getElementById('highest-bac');
+    const drinkData = localStorage.getItem('drinkData');
+    const drinks = drinkData ? JSON.parse(drinkData) : {};
+
+    if (Object.keys(drinks).length > 0) {
+        chartExplainer.classList.remove('hidden');
+        highestBAC.classList.remove('hidden');
+    } else {
+        chartExplainer.classList.add('hidden');
+        highestBAC.classList.add('hidden');
     }
 }

@@ -32,3 +32,21 @@ export function initializeMenu() {
         }
     });
 }
+
+export function showMobilePopup(description) {
+    const popup = document.getElementById('mobile-popup');
+    const popupContent = document.getElementById("mobile-popup-content");
+    popupContent.innerHTML = `<h3>${description.title}</h3><p>${description.description}</p>`;
+    popup.classList.add('active');
+}
+
+export function closeMobilePopup() {
+    const popup = document.getElementById('mobile-popup');
+    popup.classList.remove('active');
+}
+
+// Generic popup close function that can be used by any module
+export function closePopup(popupId) {
+    const popup = document.getElementById(popupId);
+    popup.classList.remove('active');
+}

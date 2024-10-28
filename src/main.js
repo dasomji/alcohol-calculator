@@ -2,7 +2,6 @@ import * as storage from './modules/storage.js';
 import * as user from './modules/user.js';
 import * as drinks from './modules/drinks.js';
 import * as chart from './modules/chart.js';
-import * as ui from './modules/ui.js';
 import * as clockDisplay from './modules/clockDisplay.js';
 import * as menu from './modules/menu.js';
 
@@ -18,23 +17,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     drinks.loadDrinkOptions();
     clockDisplay.updateClockDisplay();
     chart.calculateBAC();
-    ui.initializeSliders();
-    ui.toggleChartExplainer();
+    user.initializeSliders();
+    chart.toggleChartExplainer();
     menu.initializeMenu();
 
     // Add event listeners to clock numbers
     document.querySelectorAll('.clock-number').forEach(element => {
         element.addEventListener('click', (e) => {
             const hour = parseInt(e.target.textContent);
-            ui.openDrinkPopup(hour);
+            clockDisplay.openDrinkPopup(hour);
         });
     });
 });
 
 // Make necessary functions available to the global scope for HTML event handlers
-window.openUserInfoPopup = ui.openUserInfoPopup;
-window.closePopup = ui.closePopup;
-window.openDrinkPopup = ui.openDrinkPopup;
+window.openUserInfoPopup = user.openUserInfoPopup;
+window.closePopup = menu.closePopup;
+window.openDrinkPopup = clockDisplay.openDrinkPopup;
 window.saveUserInfo = user.saveUserInfo;
 window.clearDrinkData = drinks.clearDrinkData;
-window.closeMobilePopup = ui.closeMobilePopup;
+window.closeMobilePopup = menu.closeMobilePopup;
