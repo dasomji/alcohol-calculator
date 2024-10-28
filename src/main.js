@@ -55,6 +55,12 @@ export let selectedHour = null;
 export let bacChartInstance = null;
 export let promillDescriptions = null;
 
+// Generic popup close function that can be used by any module
+export function closePopup(popupId) {
+    const popup = document.getElementById(popupId);
+    popup.classList.remove('active');
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     await chart.loadPromillDescriptions();
     user.loadUserData();
@@ -77,8 +83,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Make necessary functions available to the global scope for HTML event handlers
 window.openUserInfoPopup = user.openUserInfoPopup;
-window.closePopup = menu.closePopup;
 window.openDrinkPopup = drinkingClock.openDrinkPopup;
 window.saveUserInfo = user.saveUserInfo;
 window.clearDrinkData = drinkingClock.clearDrinkData;
 window.closeMobilePopup = menu.closeMobilePopup;
+window.closePopup = closePopup;

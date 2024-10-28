@@ -1,5 +1,4 @@
-import { getLocalStorage } from '../main.js';
-import { closePopup } from './menu.js';
+import { closePopup, getLocalStorage } from '../main.js';
 import { loadDrinkOptions } from './drinkingClock.js';
 
 export function saveUserInfo() {

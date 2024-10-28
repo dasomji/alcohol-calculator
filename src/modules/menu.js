@@ -45,8 +45,4 @@ export function closeMobilePopup() {
     popup.classList.remove('active');
 }
 
-// Generic popup close function that can be used by any module
-export function closePopup(popupId) {
-    const popup = document.getElementById(popupId);
-    popup.classList.remove('active');
-}
+

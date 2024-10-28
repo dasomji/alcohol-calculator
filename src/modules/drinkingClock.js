@@ -1,6 +1,5 @@
 import { calculateBAC, toggleChartExplainer } from './chart.js';
 import { getLocalStorage, state } from '../main.js';
-import { closePopup } from './menu.js';
 
 export function updateClockDisplay() {
     return new Promise((resolve) => {
@@ -109,7 +108,7 @@ export async function saveDrink(hour, drinkType, percentAlcohol, quantity) {
     }
     drinkData[hour].push({ drinkType, percentAlcohol, quantity });
     localStorage.setItem('drinkData', JSON.stringify(drinkData));
-    closePopup('drink-popup');
+    closeDrinkPopup();
     await updateClockDisplay();
     calculateBAC();
     toggleChartExplainer();
@@ -132,7 +131,7 @@ export function loadDrinkData() {
 export function selectDrink(drink) {
     const hour = state.getSelectedHour();
     saveDrink(hour, drink.name, drink.percentAlcohol, drink.volume);
-    closePopup('drink-popup');
+    closeDrinkPopup();
 }
 
 export async function loadDrinkOptions() {
@@ -215,7 +214,7 @@ export function deleteDrink(hour, index) {
 
     if (drinkData[hour].length === 0) {
         delete drinkData[hour];
-        closePopup("drink-list-modal");
+        closeDrinkPopup("drink-list-modal");
         return
     }
     // Refresh the modal
