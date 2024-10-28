@@ -15,7 +15,7 @@ export function updateClockDisplay() {
             const data = JSON.parse(drinkData);
 
             // Load drink data from drinks.json
-            fetch('drinks.json')
+            fetch('assets/drinks.json')
                 .then(response => response.json())
                 .then(drinkTypes => {
                     Object.entries(data).forEach(([hour, drinks]) => {
@@ -135,7 +135,7 @@ export function selectDrink(drink) {
 
 export async function loadDrinkOptions() {
     try {
-        const response = await fetch('drinks.json');
+        const response = await fetch('assets/drinks.json');
         const drinks = await response.json();
 
         const drinkPopup = document.getElementById('drinks-container');
@@ -218,7 +218,7 @@ export function deleteDrink(hour, index) {
     }
     // Refresh the modal
     const drinks = drinkData[hour] || [];
-    fetch('drinks.json')
+    fetch('assets/drinks.json')
         .then(response => response.json())
         .then(drinkTypes => {
             showDrinkListModal(hour, drinks, drinkTypes);

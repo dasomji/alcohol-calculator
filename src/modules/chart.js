@@ -6,7 +6,7 @@ let promillDescriptions = null;
 
 export async function loadPromillDescriptions() {
     try {
-        const response = await fetch('promill-description.json');
+        const response = await fetch('assets/promill-description.json');
         promillDescriptions = await response.json();
     } catch (error) {
         console.error('Error loading promill descriptions:', error);
@@ -244,7 +244,7 @@ function renderDrinkPictograms() {
     if (drinkData) {
         const drinks = JSON.parse(drinkData);
 
-        fetch('drinks.json')
+        fetch('assets/drinks.json')
             .then(response => response.json())
             .then(drinkTypes => {
                 console.log('Drink types loaded:', drinkTypes);
