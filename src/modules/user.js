@@ -1,6 +1,6 @@
 import { getLocalStorage } from '../main.js';
 import { closePopup } from './menu.js';
-import { loadDrinkOptions } from './drinks.js';
+import { loadDrinkOptions } from './drinkingClock.js';
 
 export function saveUserInfo() {
     const gender = document.getElementById('gender').value;

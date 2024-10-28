@@ -1,3 +1,9 @@
+// Import other modules
+import * as user from './modules/user.js';
+import * as drinkingClock from './modules/drinkingClock.js';
+import * as chart from './modules/chart.js';
+import * as menu from './modules/menu.js';
+
 // State management
 class AppState {
     static instance = null;
@@ -42,12 +48,7 @@ export function getLocalStorage(key) {
 // Export state instance
 export const state = AppState.getInstance();
 
-// Import other modules
-import * as user from './modules/user.js';
-import * as drinks from './modules/drinks.js';
-import * as chart from './modules/chart.js';
-import * as clockDisplay from './modules/clockDisplay.js';
-import * as menu from './modules/menu.js';
+
 
 // Shared state
 export let selectedHour = null;
@@ -57,9 +58,9 @@ export let promillDescriptions = null;
 document.addEventListener('DOMContentLoaded', async () => {
     await chart.loadPromillDescriptions();
     user.loadUserData();
-    drinks.loadDrinkData();
-    drinks.loadDrinkOptions();
-    clockDisplay.updateClockDisplay();
+    drinkingClock.loadDrinkData();
+    drinkingClock.loadDrinkOptions();
+    drinkingClock.updateClockDisplay();
     chart.calculateBAC();
     user.initializeSliders();
     chart.toggleChartExplainer();
@@ -69,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.clock-number').forEach(element => {
         element.addEventListener('click', (e) => {
             const hour = parseInt(e.target.textContent);
-            clockDisplay.openDrinkPopup(hour);
+            drinkingClock.openDrinkPopup(hour);
         });
     });
 });
@@ -77,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Make necessary functions available to the global scope for HTML event handlers
 window.openUserInfoPopup = user.openUserInfoPopup;
 window.closePopup = menu.closePopup;
-window.openDrinkPopup = clockDisplay.openDrinkPopup;
+window.openDrinkPopup = drinkingClock.openDrinkPopup;
 window.saveUserInfo = user.saveUserInfo;
-window.clearDrinkData = drinks.clearDrinkData;
+window.clearDrinkData = drinkingClock.clearDrinkData;
 window.closeMobilePopup = menu.closeMobilePopup;
