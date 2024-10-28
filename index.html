@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Promill-Rechner</title>
+    <title data-i18n="title">Promill-Rechner</title>
     <link rel="stylesheet" href="src/styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script
@@ -22,22 +22,39 @@
       </button>
     </header>
     <nav id="slide-menu">
+      <div id="language-switcher">
+        <button class="flag-button" data-lang="de">🇩🇪</button>
+        <button class="flag-button" data-lang="en">🇬🇧</button>
+      </div>
       <ul>
-        <li><a href="#" class="active">Promill-Rechner</a></li>
-        <li><a href="#">Für Lehrer:innen & Trainer</a></li>
-        <li><a href="#">Über</a></li>
+        <li>
+          <a href="#" class="active" data-i18n="menu.calculator"
+            >Promill-Rechner</a
+          >
+        </li>
+        <li>
+          <a href="#" data-i18n="menu.forTeachers"
+            >Für Lehrer:innen & Trainer</a
+          >
+        </li>
+        <li><a href="#" data-i18n="menu.about">Über</a></li>
       </ul>
       <div id="qrcode"></div>
     </nav>
-    <h1>Promill-Rechner</h1>
+    <h1 data-i18n="title">Promill-Rechner</h1>
     <div id="user-info-container">
       <div id="user-info" onclick="openUserInfoPopup()">
         <!-- gets populated by JS -->
       </div>
       <p>
-        Deine fiktive Party startet um 18:00 und endet spätestens um 5:00 in der
-        Früh. <br />
-        Klicke auf eine Uhrzeit um ein Getränk hinzuzufügen.
+        <span data-i18n="clock.partyTime"
+          >Deine fiktive Party startet um 18:00 und endet spätestens um 5:00 in
+          der Früh.</span
+        >
+        <br />
+        <span data-i18n="clock.clickTime"
+          >Klicke auf eine Uhrzeit um ein Getränk hinzuzufügen.</span
+        >
       </p>
     </div>
     <div id="clock-container">
@@ -54,21 +71,29 @@
         <div class="clock-number">22</div>
         <div class="clock-number">23</div>
         <div class="clock-number">0</div>
-        <div class="clock-hand left-hand">Click on</div>
-        <div class="clock-hand right-hand">an hour</div>
+        <div class="clock-hand left-hand" data-i18n="clock.clickOn">
+          Click on
+        </div>
+        <div class="clock-hand right-hand" data-i18n="clock.anHour">
+          an hour
+        </div>
         <div class="clock-hand middle-dot"></div>
       </div>
-      <!-- <div id="bac-bar"></div> -->
     </div>
-    <button class="clear-button" onclick="clearDrinkData()">
+    <button
+      class="clear-button"
+      onclick="clearDrinkData()"
+      data-i18n="clock.clearDrinks"
+    >
       Drinks löschen
     </button>
-    <p id="chart-explainer" class="hidden">
+    <p id="chart-explainer" class="hidden" data-i18n="chart.explainer">
       Klicke auf einen Bereich in dem Diagramm um zu sehen, welche Auswirkung
       dieser Alkoholgehalt auf dich hat.
     </p>
     <p id="highest-bac" class="hidden">
-      Höchster Alkoholgehalt: <span id="highest-bac-value"></span>‰
+      <span data-i18n="chart.highestBac">Höchster Alkoholgehalt:</span>
+      <span id="highest-bac-value"></span>‰
     </p>
     <div id="bacChart-container">
       <canvas id="bacChart"></canvas>
@@ -76,18 +101,20 @@
 
     <!-- Popups -->
     <div id="user-info-popup" class="popup">
-      <h2>Infos über dich</h2>
-      <p>Wie betrunken du wirst, hängt von folgenden Faktoren ab:</p>
+      <h2 data-i18n="userInfo.title">Infos über dich</h2>
+      <p data-i18n="userInfo.description">
+        Wie betrunken du wirst, hängt von folgenden Faktoren ab:
+      </p>
       <form onsubmit="saveUserInfo(); return false;">
-        <label for="gender">Geschlecht:</label>
+        <label for="gender" data-i18n="userInfo.gender">Geschlecht:</label>
         <select id="gender">
-          <option value="male">Mann</option>
-          <option value="female">Frau</option>
-          <option value="inter">Inter</option>
+          <option value="male" data-i18n="userInfo.genderMale">Mann</option>
+          <option value="female" data-i18n="userInfo.genderFemale">Frau</option>
+          <option value="inter" data-i18n="userInfo.genderInter">Inter</option>
         </select>
 
         <div class="number-input">
-          <label for="weight">Gewicht (kg):</label>
+          <label for="weight" data-i18n="userInfo.weight">Gewicht (kg):</label>
           <div class="slider-container">
             <input
               type="range"
@@ -102,7 +129,7 @@
         </div>
 
         <div class="number-input">
-          <label for="height">Größe (cm):</label>
+          <label for="height" data-i18n="userInfo.height">Größe (cm):</label>
           <div class="slider-container">
             <input
               type="range"
@@ -117,7 +144,7 @@
         </div>
 
         <div class="number-input">
-          <label for="age">Alter:</label>
+          <label for="age" data-i18n="userInfo.age">Alter:</label>
           <div class="slider-container">
             <input
               type="range"
@@ -131,8 +158,12 @@
           </div>
         </div>
 
-        <button type="submit">Speichern</button>
-        <button type="button" onclick="closePopup('user-info-popup')">
+        <button type="submit" data-i18n="userInfo.save">Speichern</button>
+        <button
+          type="button"
+          onclick="closePopup('user-info-popup')"
+          data-i18n="common.cancel"
+        >
           Cancel
         </button>
       </form>
@@ -140,11 +171,15 @@
 
     <div id="drink-popup" class="popup">
       <div id="drink-popup-content">
-        <h2>Getränk hinzufügen</h2>
+        <h2 data-i18n="drinks.addDrink">Getränk hinzufügen</h2>
         <div id="drinks-container">
           <!-- Drink options will be dynamically loaded here -->
         </div>
-        <button type="button" onclick="closePopup('drink-popup')">
+        <button
+          type="button"
+          onclick="closePopup('drink-popup')"
+          data-i18n="common.cancel"
+        >
           Cancel
         </button>
       </div>
@@ -152,9 +187,16 @@
 
     <div id="drink-list-modal" class="popup">
       <div class="popup-content">
-        <h2>Drinks at <span id="drink-list-time"></span></h2>
+        <h2>
+          <span data-i18n="drinks.drinksAt">Drinks at</span>
+          <span id="drink-list-time"></span>
+        </h2>
         <ul id="drink-list"></ul>
-        <button type="button" onclick="closePopup('drink-list-modal')">
+        <button
+          type="button"
+          onclick="closePopup('drink-list-modal')"
+          data-i18n="common.close"
+        >
           Close
         </button>
       </div>

@@ -1,0 +1,51 @@
+[{
+        "title": "Up to 0.02% BAC",
+        "promill": 0.2,
+        "description": "People who are very sensitive to alcohol or not used to drinking may already experience disinhibiting effects. Talkativeness also increases."
+    },
+    {
+        "title": "From 0.02% BAC",
+        "promill": 0.3,
+        "description": "Slowed reactions, reduced coordination of movements, less receptive to criticism, increased risk-taking behavior, loss of social distance."
+    },
+    {
+        "title": "From 0.03% BAC",
+        "promill": 0.5,
+        "description": "First restrictions in field of vision, problems with distance estimation."
+    },
+    {
+        "title": "From 0.05% BAC (mild intoxication)",
+        "promill": 0.8,
+        "description": "Significant decrease in reaction ability, especially to red signals (red light weakness), reduced concentration ability, impaired hearing, increased irritability."
+    },
+    {
+        "title": "From 0.08% BAC",
+        "promill": 1.0,
+        "description": "First balance disorders, narrowed field of vision (tunnel vision), restricted reaction ability, significant disinhibition, euphoria, slurred speech & talkativeness, walking disorders."
+    },
+    {
+        "title": "From 0.10% BAC",
+        "promill": 1.5,
+        "description": "Significant speech disorders, risk-taking behavior and aggressiveness continue to increase."
+    },
+    {
+        "title": "From 0.15% BAC (severe intoxication)",
+        "promill": 2.5,
+        "description": "Loss of reality perception, mood swings, severe coordination disorders, balance disorders, orientation disorders, slurred speech."
+    },
+    {
+        "title": "From 0.25% BAC",
+        "promill": 3.0,
+        "description": "Clouding of consciousness, paralysis symptoms, double vision, loss of memory function."
+    },
+    {
+        "title": "From 0.30% BAC",
+        "promill": 3.5,
+        "description": "Strong sedation, unconsciousness up to coma."
+    },
+    {
+        "title": "From 0.35% BAC",
+        "promill": 20,
+        "description": "Risk of respiratory center paralysis and thus danger to life."
+    }
+]

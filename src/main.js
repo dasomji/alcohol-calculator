@@ -25,6 +25,8 @@ import {
     initializeMenu
 } from './modules/menu.js';
 
+import { i18n } from './i18n/languageManager.js';
+
 class AppState {
     static #instance = null;
 
@@ -70,6 +72,7 @@ async function initializeApp() {
     initializeDrinkingClock();
     initializeMenu();
     initializeEventListeners();
+    i18n.updatePageContent();
 }
 
 async function initializeChart() {

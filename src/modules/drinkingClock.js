@@ -1,5 +1,6 @@
 import { calculateBAC, toggleChartExplainer } from './chart.js';
 import { getLocalStorage, state, closePopup } from '../main.js';
+import { i18n } from '../i18n/languageManager.js';
 
 export function updateClockDisplay() {
     return new Promise((resolve) => {
@@ -89,7 +90,7 @@ export function showDrinkListModal(hour, drinks, drinkTypes) {
             listItem.textContent = `${drinkType.name} ${drinkType.pictogram}`;
 
             const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
+            deleteButton.textContent = i18n.t('drinks.delete');
             deleteButton.onclick = () => deleteDrink(hour, index);
 
             listItem.appendChild(deleteButton);
@@ -139,7 +140,7 @@ export async function loadDrinkOptions() {
         const drinks = await response.json();
 
         const drinkPopup = document.getElementById('drinks-container');
-        drinkPopup.innerHTML = ''; // Clear existing content
+        drinkPopup.innerHTML = '';
 
         drinks.forEach(drink => {
             const drinkDiv = document.createElement('div');
@@ -148,12 +149,12 @@ export async function loadDrinkOptions() {
 
             const drinkImage = document.createElement('img');
             drinkImage.src = drink.imageUrl;
-            drinkImage.alt = drink.name;
+            drinkImage.alt = i18n.t(`drinks.${drink.name.toLowerCase()}`);
 
             const drinkInfoDiv = document.createElement('div');
             drinkInfoDiv.classList.add('drink-info');
             const drinkName = document.createElement('p');
-            drinkName.textContent = drink.name;
+            drinkName.textContent = i18n.t(`drinks.${drink.name.toLowerCase()}`);
             drinkName.id = 'drink-name';
             const drinkDetails = document.createElement('p');
             drinkDetails.textContent = `${drink.percentAlcohol}%, ${drink.volume}ml`;

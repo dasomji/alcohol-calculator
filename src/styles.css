@@ -53,6 +53,9 @@ header {
   right: 0;
   padding: 20px;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 #menu-toggle {
@@ -108,6 +111,34 @@ header {
 
 #slide-menu ul li a.active {
   font-weight: bold;
+}
+
+/*---------- Language Switcher ----------*/
+#language-switcher {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+}
+
+.flag-button {
+  background: none;
+  /* border: 2px solid transparent; */
+  padding: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 2em;
+}
+
+.flag-button:hover {
+  border-color: #ddd;
+}
+
+.flag-button.active {
+  border-color: var(--color-clock-border);
+}
+
+.flag-button:not(.active) {
+  filter: grayscale(100%);
 }
 
 /*---------- User Info Container ----------*/

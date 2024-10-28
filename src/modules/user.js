@@ -1,5 +1,6 @@
 import { closePopup, getLocalStorage } from '../main.js';
 import { loadDrinkOptions } from './drinkingClock.js';
+import { i18n } from '../i18n/languageManager.js';
 
 export function saveUserInfo() {
     const gender = document.getElementById('gender').value;
@@ -41,21 +42,8 @@ export function updateUserInfoDisplay() {
     const userData = getLocalStorage('userData');
     if (userData) {
         const { gender, weight, height, age } = JSON.parse(userData);
-        let displayGender;
-        switch (gender) {
-            case 'male':
-                displayGender = 'Mann';
-                break;
-            case 'female':
-                displayGender = 'Frau';
-                break;
-            case 'inter':
-                displayGender = 'Inter';
-                break;
-            default:
-                displayGender = gender;
-        }
-        document.getElementById('user-info').innerText = `${displayGender} / ${weight}kg / ${height}cm / ${age} Jahre`;
+        const displayGender = i18n.t(`userInfo.gender${gender.charAt(0).toUpperCase() + gender.slice(1)}`);
+        document.getElementById('user-info').innerText = `${displayGender} / ${weight}kg / ${height}cm / ${age} ${i18n.t('userInfo.years')}`;
     }
 }
 

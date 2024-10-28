@@ -1,15 +1,29 @@
 import { getLocalStorage } from '../main.js';
 import { showMobilePopup } from './menu.js';
+import { i18n } from '../i18n/languageManager.js';
 
 let bacChartInstance = null;
 let promillDescriptions = null;
 
+document.addEventListener('languageChanged', async () => {
+    await loadPromillDescriptions();
+    if (bacChartInstance) {
+        calculateBAC();
+    }
+});
+
 export async function loadPromillDescriptions() {
     try {
-        const response = await fetch('assets/promill-description.json');
+        const language = i18n.currentLanguage;
+        const response = await fetch(`assets/promill-description.${language}.json`);
         promillDescriptions = await response.json();
     } catch (error) {
         console.error('Error loading promill descriptions:', error);
+        // Fallback to English if the current language file fails to load
+        if (i18n.currentLanguage !== 'en') {
+            const fallbackResponse = await fetch('assets/promill-description.en.json');
+            promillDescriptions = await fallbackResponse.json();
+        }
     }
 }
 
@@ -169,7 +183,7 @@ export function updateBACTable(bacTable) {
                 x: {
                     title: {
                         display: true,
-                        text: 'Uhrzeit'
+                        text: i18n.t('chart.time')
                     },
                     grid: {
                         display: false
@@ -178,7 +192,7 @@ export function updateBACTable(bacTable) {
                 y: {
                     title: {
                         display: true,
-                        text: '‰ Alkohol'
+                        text: i18n.t('chart.alcohol')
                     },
                     grid: {
                         display: false

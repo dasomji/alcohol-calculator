@@ -1,3 +1,5 @@
+import { i18n } from '../i18n/languageManager.js';
+
 export function generateQRCode() {
     const qrcodeContainer = document.getElementById('qrcode');
     if (qrcodeContainer.firstChild) {
@@ -30,6 +32,22 @@ export function initializeMenu() {
         if (!slideMenu.contains(event.target) && !menuToggle.contains(event.target)) {
             slideMenu.classList.remove('active');
         }
+    });
+
+    // Add click handlers for flag buttons
+    document.querySelectorAll('.flag-button').forEach(button => {
+        // Set initial active state
+        button.classList.toggle('active', button.dataset.lang === i18n.currentLanguage);
+
+        button.addEventListener('click', (e) => {
+            const lang = e.currentTarget.dataset.lang;
+            i18n.setLanguage(lang);
+
+            // Update active state
+            document.querySelectorAll('.flag-button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+        });
     });
 }
 
