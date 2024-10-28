@@ -1,129 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Promill-Rechner</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-</head>
-<body>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+      integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
     <header>
-        <button id="menu-toggle" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+      <button id="menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </header>
     <nav id="slide-menu">
-        <ul>
-            <li><a href="#" class="active">Promill-Rechner</a></li>
-            <li><a href="#">Für Lehrer:innen & Trainer</a></li>
-            <li><a href="#">Über</a></li>
-        </ul>
-        <div id="qrcode"></div>
+      <ul>
+        <li><a href="#" class="active">Promill-Rechner</a></li>
+        <li><a href="#">Für Lehrer:innen & Trainer</a></li>
+        <li><a href="#">Über</a></li>
+      </ul>
+      <div id="qrcode"></div>
     </nav>
     <h1>Promill-Rechner</h1>
     <div id="user-info-container">
-        <div id="user-info" onclick="openUserInfoPopup()">
-            <!-- gets populated by JS -->
-        </div>
-        <p>Deine fiktive Party startet um 18:00 und endet spätestens um 5:00 in der Früh. <br> Klicke auf eine Uhrzeit um ein Getränk hinzuzufügen.</p>
+      <div id="user-info" onclick="openUserInfoPopup()">
+        <!-- gets populated by JS -->
+      </div>
+      <p>
+        Deine fiktive Party startet um 18:00 und endet spätestens um 5:00 in der
+        Früh. <br />
+        Klicke auf eine Uhrzeit um ein Getränk hinzuzufügen.
+      </p>
     </div>
     <div id="clock-container">
-        <div id="clock">
-            <div class="clock-number" onclick="openDrinkPopup(1)">1</div>
-            <div class="clock-number" onclick="openDrinkPopup(2)">2</div>
-            <div class="clock-number" onclick="openDrinkPopup(3)">3</div>
-            <div class="clock-number" onclick="openDrinkPopup(4)">4</div>
-            <div class="clock-number" onclick="openDrinkPopup(5)">5</div>
-            <div class="clock-number" onclick="openDrinkPopup(18)">18</div>
-            <div class="clock-number" onclick="openDrinkPopup(19)">19</div>
-            <div class="clock-number" onclick="openDrinkPopup(20)">20</div>
-            <div class="clock-number" onclick="openDrinkPopup(21)">21</div>
-            <div class="clock-number" onclick="openDrinkPopup(22)">22</div>
-            <div class="clock-number" onclick="openDrinkPopup(23)">23</div>
-            <div class="clock-number" onclick="openDrinkPopup(0)">0</div>               
-            <div class="clock-hand left-hand">Click on</div>
-            <div class="clock-hand right-hand">an hour</div>
-            <div class="clock-hand middle-dot"></div>
-        </div>
-        <!-- <div id="bac-bar"></div> -->
+      <div id="clock">
+        <div class="clock-number">1</div>
+        <div class="clock-number">2</div>
+        <div class="clock-number">3</div>
+        <div class="clock-number">4</div>
+        <div class="clock-number">5</div>
+        <div class="clock-number">18</div>
+        <div class="clock-number">19</div>
+        <div class="clock-number">20</div>
+        <div class="clock-number">21</div>
+        <div class="clock-number">22</div>
+        <div class="clock-number">23</div>
+        <div class="clock-number">0</div>
+        <div class="clock-hand left-hand">Click on</div>
+        <div class="clock-hand right-hand">an hour</div>
+        <div class="clock-hand middle-dot"></div>
+      </div>
+      <!-- <div id="bac-bar"></div> -->
     </div>
-    <button class="clear-button" onclick="clearDrinkData()">Drinks löschen</button>
-    <p id="chart-explainer" class="hidden">Klicke auf einen Bereich in dem Diagramm um zu sehen, welche Auswirkung dieser Alkoholgehalt auf dich hat.</p>
-    <p id="highest-bac" class="hidden">Höchster Alkoholgehalt: <span id="highest-bac-value"></span>‰</p>
+    <button class="clear-button" onclick="clearDrinkData()">
+      Drinks löschen
+    </button>
+    <p id="chart-explainer" class="hidden">
+      Klicke auf einen Bereich in dem Diagramm um zu sehen, welche Auswirkung
+      dieser Alkoholgehalt auf dich hat.
+    </p>
+    <p id="highest-bac" class="hidden">
+      Höchster Alkoholgehalt: <span id="highest-bac-value"></span>‰
+    </p>
     <div id="bacChart-container">
-        <canvas id="bacChart"></canvas>
+      <canvas id="bacChart"></canvas>
     </div>
 
     <!-- Popups -->
     <div id="user-info-popup" class="popup">
-        <h2>Infos über dich</h2>
-        <p>Wie betrunken du wirst, hängt von folgenden Faktoren ab:</p>
-        <form onsubmit="saveUserInfo(); return false;">
-            <label for="gender">Geschlecht:</label>
-            <select id="gender">
-                <option value="male">Mann</option>
-                <option value="female">Frau</option>
-                <option value="inter">Inter</option>
-            </select>
-            
-            <div class="number-input">
-                <label for="weight">Gewicht (kg):</label>
-                <div class="slider-container">
-                    <input type="range" id="weight-slider" min="30" max="200" step="1" value="80">
-                    <input type="number" id="weight" required>
-                </div>
-            </div>
-            
-            <div class="number-input">
-                <label for="height">Größe (cm):</label>
-                <div class="slider-container">
-                    <input type="range" id="height-slider" min="100" max="250" step="1" value="170">
-                    <input type="number" id="height" required>
-                </div>
-            </div>
-            
-            <div class="number-input">
-                <label for="age">Alter:</label>
-                <div class="slider-container">
-                    <input type="range" id="age-slider" min="18" max="100" step="1" value="30">
-                    <input type="number" id="age" required>
-                </div>
-            </div>
-            
-            <button type="submit">Speichern</button>
-            <button type="button" onclick="closePopup('user-info-popup')">Cancel</button>
-        </form>
-    </div>
-        
-    <div id="drink-popup" class="popup">
-        <div id="drink-popup-content">
-            <h2>Getränk hinzufügen</h2>
-            <div id="drinks-container">
-            <!-- Drink options will be dynamically loaded here -->
-            </div>
-            <button type="button" onclick="closePopup('drink-popup')">Cancel</button>
+      <h2>Infos über dich</h2>
+      <p>Wie betrunken du wirst, hängt von folgenden Faktoren ab:</p>
+      <form onsubmit="saveUserInfo(); return false;">
+        <label for="gender">Geschlecht:</label>
+        <select id="gender">
+          <option value="male">Mann</option>
+          <option value="female">Frau</option>
+          <option value="inter">Inter</option>
+        </select>
+
+        <div class="number-input">
+          <label for="weight">Gewicht (kg):</label>
+          <div class="slider-container">
+            <input
+              type="range"
+              id="weight-slider"
+              min="30"
+              max="200"
+              step="1"
+              value="80"
+            />
+            <input type="number" id="weight" required />
+          </div>
         </div>
+
+        <div class="number-input">
+          <label for="height">Größe (cm):</label>
+          <div class="slider-container">
+            <input
+              type="range"
+              id="height-slider"
+              min="100"
+              max="250"
+              step="1"
+              value="170"
+            />
+            <input type="number" id="height" required />
+          </div>
+        </div>
+
+        <div class="number-input">
+          <label for="age">Alter:</label>
+          <div class="slider-container">
+            <input
+              type="range"
+              id="age-slider"
+              min="18"
+              max="100"
+              step="1"
+              value="30"
+            />
+            <input type="number" id="age" required />
+          </div>
+        </div>
+
+        <button type="submit">Speichern</button>
+        <button type="button" onclick="closePopup('user-info-popup')">
+          Cancel
+        </button>
+      </form>
+    </div>
+
+    <div id="drink-popup" class="popup">
+      <div id="drink-popup-content">
+        <h2>Getränk hinzufügen</h2>
+        <div id="drinks-container">
+          <!-- Drink options will be dynamically loaded here -->
+        </div>
+        <button type="button" onclick="closePopup('drink-popup')">
+          Cancel
+        </button>
+      </div>
     </div>
 
     <div id="drink-list-modal" class="popup">
-        <div class="popup-content">
-            <h2>Drinks at <span id="drink-list-time"></span></h2>
-            <ul id="drink-list"></ul>
-            <button type="button" onclick="closePopup('drink-list-modal')">Close</button>
-        </div>
+      <div class="popup-content">
+        <h2>Drinks at <span id="drink-list-time"></span></h2>
+        <ul id="drink-list"></ul>
+        <button type="button" onclick="closePopup('drink-list-modal')">
+          Close
+        </button>
+      </div>
     </div>
 
     <div id="desktop-tooltip"></div>
     <div id="mobile-popup" class="popup">
-        <div class="popup-content">
-            <span class="close-btn" onclick="closeMobilePopup()">&times;</span>
-            <div id="mobile-popup-content"></div>
-        </div>
+      <div class="popup-content">
+        <span class="close-btn" onclick="closeMobilePopup()">&times;</span>
+        <div id="mobile-popup-content"></div>
+      </div>
     </div>
-    <script src="scripts.js"></script>
-</body>
+    <script type="module" src="src/main.js"></script>
+  </body>
 </html>
