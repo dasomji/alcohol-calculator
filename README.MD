@@ -29,6 +29,19 @@ There are four main parts in the app:
 - Chart, which is where the BAC is calculated and displayed.
 - Menu, which includes functionality like switching languages, the qr-code and links to other parts of the website, which include information on how this app can be used in different educational settings.
 
+### The clock
+I chose a clock as an interface to select drinks and display them, since a drinking occasion usually stays within a 12hour-cycle. Emojis are used to differntiate different types of drinks.
+
+![Screenshot of the clock interface](documentation/clock-documentation.png)
+
+### The diagram
+The diagram displays the blood alcohol level over the course of the night. The last point on the x-axis is whenever the user would get back to 0% to showcase how long it takes to metabolize the alcohol.
+
+Again emojis are displayed on top of the diagram to illustrate what was drunk.
+Clicking on the chart gives users information about how the current BAC influences human behaviour and physiology.
+
+![Screenshot of the diagram](documentation/diagram-documentation.png)
+
 ## Tech stack
 I intentionally tried to keep things simple and therefor implemented this only with vanilla html, css and javascript.
 Two external libraries are used via cdn:
