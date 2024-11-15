@@ -34,19 +34,67 @@ I chose a clock as an interface to select drinks and display them, since a drink
 
 ![Screenshot of the clock interface](documentation/clock-documentation.png)
 
-### The diagram
-The diagram displays the blood alcohol level over the course of the night. The last point on the x-axis is whenever the user would get back to 0% to showcase how long it takes to metabolize the alcohol.
+### The chart
+The chart displays the blood alcohol level over the course of the night. The last point on the x-axis is whenever the user would get back to 0% to showcase how long it takes to metabolize the alcohol.
 
 Again emojis are displayed on top of the diagram to illustrate what was drunk.
 Clicking on the chart gives users information about how the current BAC influences human behaviour and physiology.
 
 ![Screenshot of the diagram](documentation/diagram-documentation.png)
 
+### The menu
+The menu allows to switch languages, which is currently only available in German and English. The Implementation is based on the Javascript internationalization API (i18n)[].
+
+
+#### Adding translations
+If you want to contribute to the project, you can add translations for other languages by simply adding a new file in the `src/i18n` folder and adding the translations. Copy the code from en.js and put in the translations for your language.
+E.g.:
+```javascript
+export default {
+    title: 'BAC Calculator',
+    menu: {
+        calculator: 'BAC Calculator',
+        forTeachers: 'For Teachers & Trainers',
+        about: 'About'
+    },
+    ...
+}
+```
+Then create a new file in the `assets` folder and name it after your language e.g. `promill-description.es.json` and add the translations for your language. This file is used to display the information about the alcohol content on the chart - since it is linked to alcohol content, it needs its own file.
+
+Then update the `languageManager.js` file to include your language:
+```javascript
+import de from './de.js';
+import en from './en.js';
+// add your language import here e.g. ./es.js
+
+const translations = {
+    de,
+    en,
+    // add your language here
+};
+```
+Then add your language to the `index.html` file in the `language-switcher` div:
+```html
+<button class="flag-button" data-lang="de">🇩🇪</button>
+<button class="flag-button" data-lang="en">🇬🇧</button>
+<!-- add your language here -->
+```
+
+
 ## Tech stack
 I intentionally tried to keep things simple and therefor implemented this only with vanilla html, css and javascript.
 Two external libraries are used via cdn:
 - Chart.js for the diagram that displays the BAC
 - QRcode.js for the dynamic generation of the websites URL as a QR-code to make it easier in a workshop setting to share the link.
+
+## Running the app locally
+Clone the repository:
+```bash
+git clone https://github.com/dasomji/alcohol-calculator.git
+```
+
+Navigate to the directory and double-click the index.html file to open it in your default browser. If you open it in your IDE, you can use a [live server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to run the app.
 
 
 ## Deployment
@@ -57,3 +105,5 @@ To deploy the app, just put it on your server or deploy on a service like vercel
 
 - allow users to choose their own starttime of the fictional party
 - update to a more modern calculation method that includes age
+- add more translations
+- add more country-specific drinks that change based on the language settings
