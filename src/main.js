@@ -67,9 +67,20 @@ const storage = {
 
 // Initialize application components
 async function initializeApp() {
-    await initializeChart();
-    initializeUser();
-    initializeDrinkingClock();
+    const hasClock = document.getElementById('clock-container');
+    initializeMenu();
+
+    if (hasClock) {
+        await initializeChart();
+        initializeUser();
+        initializeDrinkingClock();
+    }
+
+    initializeEventListeners();
+    i18n.updatePageContent();
+}
+
+async function initializeContentPage() {
     initializeMenu();
     initializeEventListeners();
     i18n.updatePageContent();

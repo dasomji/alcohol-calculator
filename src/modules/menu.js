@@ -14,7 +14,15 @@ export function generateQRCode() {
     });
 }
 
-export function initializeMenu() {
+export async function includeMenu() {
+
+    const response = await fetch("/src/components/menu.html");
+    const menuHtml = await response.text();
+    document.getElementById('menu-container').innerHTML = menuHtml;
+}
+
+export async function initializeMenu() {
+    await includeMenu();
     const menuToggle = document.getElementById('menu-toggle');
     const slideMenu = document.getElementById('slide-menu');
     let qrCodeGenerated = false;
