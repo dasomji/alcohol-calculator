@@ -589,3 +589,9 @@ input[type="number"] {
     width: 400px;
   }
 }
+
+.content-container {
+  text-align: left;
+  line-height: 2rem;
+  max-width: 600px;
+}
