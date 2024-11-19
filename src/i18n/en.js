@@ -81,7 +81,7 @@ export default {
             instructions2: "Probably someone will say no, then briefly go through with them that body water content is crucial and depends on height, age, weight, and gender (due to statistical body fat percentage). Then show them the QR code and tell them to scan it.",
             quote3: "\"Everyone set your characteristics and then add the drinks you just mentioned: x,y,z\"",
             instructions3: "Give them some time to play around with it - when you click on different areas in the diagram, you get an explanation of what happens at which blood alcohol level. To finish, feel free to escalate with them by virtually drinking yourself into a coma and see who reaches 3.5 per mille first when drinking the same drinks at the same time (spoiler: it will be the smallest girls who 'win').",
-            note: "Important: Tell them that this isn't a tool to actually track how many per mille they have, as absorption also depends a lot on food intake."
+            note: "Important: Tell them that this isn't a tool to actually track how many per mille they have, as absorption also depends a lot on food intake, which the underlying Widmark formula doesn't account for."
         }
     }
 } 

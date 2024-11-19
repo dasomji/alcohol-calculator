@@ -14,7 +14,32 @@
     ></script>
   </head>
   <body>
-    <div id="menu-container"></div>
+    <!-- <div id="menu-container"></div> -->
+    <header>
+      <button id="menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </header>
+    <nav id="slide-menu">
+      <div id="language-switcher">
+        <button class="flag-button" data-lang="de">🇩🇪</button>
+        <button class="flag-button" data-lang="en">🇬🇧</button>
+      </div>
+      <ul>
+        <li>
+          <a href="index.html" data-i18n="menu.calculator">Promill-Rechner</a>
+        </li>
+        <li>
+          <a href="forteachers.html" data-i18n="menu.forTeachers"
+            >Für Lehrer:innen & Trainer</a
+          >
+        </li>
+        <!-- <li><a href="ueber.html" data-i18n="menu.about">Über</a></li> -->
+      </ul>
+      <div id="qrcode"></div>
+    </nav>
 
     <h1 data-i18n="title">Promill-Rechner</h1>
     <div id="user-info-container">

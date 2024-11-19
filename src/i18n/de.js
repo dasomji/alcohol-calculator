@@ -81,7 +81,7 @@ export default {
             instructions2: 'Wahrscheinlich sagt irgendwer nein. Dann geht ihr kurz mit ihnen durch, dass eben die Wassermenge im Körper entscheidend ist und die von Größe, Alter, Gewicht und Geschlecht (weil statistischer Körperfettanteil) abhängig ist. Dann zeigt ihr ihnen den QR-code und sagt ihnen, dass sie den scannen sollen.',
             quote3: '"Stellt mal alle eure Eigenschaften ein und dann fügt die Getränke hinzu, die ihr gerade aufgezählt habt: x,y,z"',
             instructions3: 'Gebt ihnen dann ein bisschen Zeit damit herumzuspielen - wenn man auf die verschiedenen Bereiche im Diagramm drückt, bekommt man eine Erklärung, was bei welchem Promill-Gehalt passiert. Zum Abschluss "eskaliert" ruhig mit ihnen, indem ihr euch in ein virtuelles Koma schießt und schaut, wer zuerst die 3,5 Promill erreicht, wenn ihr gleichzeitig die selben drinks "trinkt" (spoiler: es werden die kleinsten Mädchen sein, die "gewinnen").',
-            note: 'Wichtig: Sagt dazu, dass das kein Tool ist mit dem man tatsächlich tracken kann wieviel Promill man hat, da die Resorption auch viel vom Essen abhängt.'
+            note: 'Wichtig: Sagt dazu, dass das kein Tool ist mit dem man tatsächlich tracken kann wieviel Promill man hat, da die Resorption auch viel vom Essen abhängt und die zu Grunde liegende Widmark Formel dies nicht berücksichtigt.'
         },
     }
 }

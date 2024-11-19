@@ -22,7 +22,7 @@ export async function includeMenu() {
 }
 
 export async function initializeMenu() {
-    await includeMenu();
+    // await includeMenu();
     const menuToggle = document.getElementById('menu-toggle');
     const slideMenu = document.getElementById('slide-menu');
     let qrCodeGenerated = false;
