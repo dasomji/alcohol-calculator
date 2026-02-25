@@ -23,7 +23,8 @@ export default {
         clickTime: 'Click on a time to add a drink.',
         clickOn: 'Click on',
         anHour: 'an hour',
-        clearDrinks: 'Clear Drinks'
+        clearDrinks: 'Clear Drinks',
+        clearConfirm: 'Tap again to confirm'
     },
     chart: {
         explainer: 'Click on an area in the chart to see how this alcohol content affects you.',

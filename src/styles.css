@@ -25,14 +25,22 @@
 
 /*---------- Body and General Styles ----------*/
 body {
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   text-align: center;
   display: flex;
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 0;
+  padding: 16px;
   background-color: var(--color-background);
+}
+
+h1 {
+  margin-top: 48px;
+  margin-bottom: 4px;
+  font-size: 1.5rem;
 }
 
 select,
@@ -42,7 +50,7 @@ input {
   padding: 8px;
 }
 
-.hidden {
+.hidden:not(#chart-explainer):not(#highest-bac) {
   display: none;
 }
 
@@ -75,6 +83,19 @@ header {
   height: 3px;
   background: var(--color-menu-icon);
   transition: all 0.3s linear;
+  transform-origin: center;
+}
+
+#menu-toggle.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+#menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+#menu-toggle.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 #slide-menu {
@@ -111,6 +132,19 @@ header {
 
 #slide-menu ul li a.active {
   font-weight: bold;
+  position: relative;
+  padding-left: 12px;
+}
+
+#slide-menu ul li a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--color-clock-border);
+  border-radius: 2px;
 }
 
 /*---------- Language Switcher ----------*/
@@ -148,14 +182,23 @@ header {
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 16px;
 }
 
-#user-info,
-button {
+#user-info-container p {
+  font-size: 0.85rem;
+  color: rgba(63, 63, 63, 0.7);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/*---------- Button Styles ----------*/
+.btn-primary {
   border: none;
   display: inline-block;
-  padding: 10px;
+  padding: 10px 16px;
   color: var(--color-text);
   text-decoration: none;
   border-radius: 16px;
@@ -166,6 +209,55 @@ button {
     var(--color-gradient-start),
     var(--color-gradient-end)
   );
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btn-primary:hover {
+  filter: brightness(0.95);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-clock-border);
+  outline-offset: 2px;
+}
+
+.btn-secondary {
+  border: 1px solid var(--color-border);
+  background: transparent;
+  padding: 10px 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 1em;
+  color: var(--color-text);
+  transition: background 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--color-clock-border);
+  outline-offset: 2px;
+}
+
+#user-info {
+  position: relative;
+  padding-right: 28px;
+}
+
+#user-info::after {
+  content: '\276F';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8em;
+  opacity: 0.6;
 }
 
 .clear-button {
@@ -173,8 +265,21 @@ button {
     112deg,
     var(--color-clear-button-start),
     var(--color-clear-button-end)
-  );
-  transition: margin-top 0.3s ease;
+  ) !important;
+  transition: margin-top 0.3s ease, background 0.3s ease;
+  margin-bottom: 24px;
+}
+
+.clear-button.confirming {
+  background: linear-gradient(112deg, #cc4444, #dd6666) !important;
+  color: white;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
 }
 
 /*---------- Clock Container ----------*/
@@ -223,6 +328,20 @@ button {
   border: 1px solid var(--color-clock-border);
   border-radius: 50px;
   cursor: default;
+  background: rgba(255, 255, 255, 0.7);
+  animation: pulse 2s ease-in-out infinite;
+  transition: opacity 0.3s ease;
+}
+
+.clock-hand.hidden-hand {
+  animation: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
 }
 
 .middle-dot {
@@ -264,6 +383,15 @@ button {
   border-radius: 100%;
   transform: rotateZ(calc((var(--nth-child) + 6) * 30 * 1deg)) translateY(400%)
     rotateZ(calc((var(--nth-child) + 6) * 30 * -1deg));
+  transition: background 0.15s ease;
+}
+
+.clock-number:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.clock-number:active {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 /*---------- Nth-child Styles for drink groups around the clock face----------*/
@@ -334,31 +462,78 @@ button {
 #bacChart-container {
   width: 100%;
   max-width: 900px;
+  margin-bottom: 32px;
 }
 
 #chart-explainer {
   width: calc(100vw - 80px);
   max-width: 400px;
+  margin-top: 8px;
+}
+
+#chart-explainer,
+#highest-bac {
+  transition: opacity 0.4s ease, max-height 0.4s ease;
+  opacity: 1;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+#chart-explainer.hidden,
+#highest-bac.hidden {
+  opacity: 0;
+  max-height: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/*---------- Popup Backdrop ----------*/
+.popup-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s;
+}
+
+.popup-backdrop.active {
+  opacity: 1;
+  visibility: visible;
 }
 
 /*---------- Popups ----------*/
 .popup {
-  display: none;
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0.9);
   background: var(--color-popup-background);
   border: 1px solid var(--color-border);
   padding: 20px;
   z-index: 1000;
-  border-radius: 8px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  width: min(300px, calc(100vw - 40px));
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
 }
 
 .popup.active {
-  display: block;
-  width: 300px;
-  height: auto;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#drink-popup.active {
+  width: min(360px, calc(100vw - 32px));
 }
 
 .close-btn {
@@ -459,7 +634,8 @@ input[type="number"] {
 }
 
 .drink-option {
-  width: 30%;
+  width: calc(33.333% - 8px);
+  min-width: 80px;
   height: auto;
   display: flex;
   flex-flow: column;
@@ -468,11 +644,27 @@ input[type="number"] {
   cursor: pointer;
   background-size: cover;
   background-position: center;
-  border: 1px solid black;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   overflow: hidden;
   padding-bottom: 8px;
   gap: 8px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.drink-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.drink-option:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 360px) {
+  .drink-option {
+    width: calc(50% - 8px);
+  }
 }
 
 .drink-option img {
@@ -498,6 +690,12 @@ input[type="number"] {
 
 .bac-increase {
   margin-top: 5px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--color-clock-border);
+  background: rgba(66, 66, 66, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
 /*---------- Drink List Modal ----------*/
@@ -592,6 +790,37 @@ input[type="number"] {
 
 .content-container {
   text-align: left;
-  line-height: 2rem;
+  line-height: 1.7;
   max-width: 600px;
+}
+
+.content-container .section {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.content-container .section:last-child {
+  border-bottom: none;
+}
+
+.content-container h2 {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.content-container h3 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+blockquote {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-left: 4px solid var(--color-clock-border);
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--color-text);
 }

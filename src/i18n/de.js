@@ -23,7 +23,8 @@ export default {
         clickTime: 'Klicke auf eine Uhrzeit um ein Getränk hinzuzufügen.',
         clickOn: 'Klicke auf',
         anHour: 'eine Uhrzeit',
-        clearDrinks: 'Drinks löschen'
+        clearDrinks: 'Drinks löschen',
+        clearConfirm: 'Nochmals tippen zum Bestätigen'
     },
     chart: {
         explainer: 'Klicke auf einen Bereich in dem Diagramm um zu sehen, welche Auswirkung dieser Alkoholgehalt auf dich hat.',

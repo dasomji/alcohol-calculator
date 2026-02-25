@@ -1,5 +1,5 @@
 import { calculateBAC, toggleChartExplainer } from './chart.js';
-import { getLocalStorage, state, closePopup } from '../main.js';
+import { getLocalStorage, state, closePopup, showBackdrop } from '../main.js';
 import { i18n } from '../i18n/languageManager.js';
 
 export function updateClockDisplay() {
@@ -11,8 +11,10 @@ export function updateClockDisplay() {
         const existingPictograms = clockContainer.querySelectorAll('.drink-group');
         existingPictograms.forEach(pictogram => pictogram.remove());
 
+        const clockHands = clockContainer.querySelectorAll('.clock-hand');
         const drinkData = localStorage.getItem('drinkData');
-        if (drinkData) {
+        if (drinkData && Object.keys(JSON.parse(drinkData)).length > 0) {
+            clockHands.forEach(h => h.classList.add('hidden-hand'));
             const data = JSON.parse(drinkData);
 
             // Load drink data from drinks.json
@@ -59,6 +61,7 @@ export function updateClockDisplay() {
                     resolve();
                 });
         } else {
+            clockHands.forEach(h => h.classList.remove('hidden-hand'));
             clearButton.style.marginTop = '0px';
             resolve();
         }
@@ -70,6 +73,7 @@ export function openDrinkPopup(hour) {
         state.setSelectedHour(hour);
         const popup = document.getElementById('drink-popup');
         popup.classList.add('active');
+        showBackdrop();
     } else {
         console.error('Invalid hour or state not initialized');
     }
@@ -99,6 +103,7 @@ export function showDrinkListModal(hour, drinks, drinkTypes) {
     });
 
     modal.classList.add('active');
+    showBackdrop();
 }
 
 export async function saveDrink(hour, drinkType, percentAlcohol, quantity) {
@@ -114,11 +119,30 @@ export async function saveDrink(hour, drinkType, percentAlcohol, quantity) {
     toggleChartExplainer();
 }
 
+let clearConfirmTimeout = null;
+
 export function clearDrinkData() {
-    localStorage.removeItem('drinkData');
-    toggleChartExplainer();
-    updateClockDisplay();
-    calculateBAC();
+    const drinkData = localStorage.getItem('drinkData');
+    if (!drinkData || Object.keys(JSON.parse(drinkData)).length === 0) return;
+
+    const button = document.querySelector('.clear-button');
+
+    if (button.classList.contains('confirming')) {
+        clearTimeout(clearConfirmTimeout);
+        button.classList.remove('confirming');
+        button.textContent = i18n.t('clock.clearDrinks');
+        localStorage.removeItem('drinkData');
+        toggleChartExplainer();
+        updateClockDisplay();
+        calculateBAC();
+    } else {
+        button.classList.add('confirming');
+        button.textContent = i18n.t('clock.clearConfirm');
+        clearConfirmTimeout = setTimeout(() => {
+            button.classList.remove('confirming');
+            button.textContent = i18n.t('clock.clearDrinks');
+        }, 3000);
+    }
 }
 
 export function loadDrinkData() {
