@@ -43,7 +43,7 @@
 
     <h1 data-i18n="title">Promill-Rechner</h1>
     <div id="user-info-container">
-      <div id="user-info" onclick="openUserInfoPopup()">
+      <div id="user-info" class="btn-primary" onclick="openUserInfoPopup()">
         <!-- gets populated by JS -->
       </div>
       <p>
@@ -81,7 +81,7 @@
       </div>
     </div>
     <button
-      class="clear-button"
+      class="clear-button btn-primary"
       onclick="clearDrinkData()"
       data-i18n="clock.clearDrinks"
     >
@@ -98,6 +98,9 @@
     <div id="bacChart-container">
       <canvas id="bacChart"></canvas>
     </div>
+
+    <!-- Popup backdrop -->
+    <div id="popup-backdrop" class="popup-backdrop"></div>
 
     <!-- Popups -->
     <div id="user-info-popup" class="popup">
@@ -158,9 +161,10 @@
           </div>
         </div>
 
-        <button type="submit" data-i18n="userInfo.save">Speichern</button>
+        <button type="submit" class="btn-primary" data-i18n="userInfo.save">Speichern</button>
         <button
           type="button"
+          class="btn-secondary"
           onclick="closePopup('user-info-popup')"
           data-i18n="common.cancel"
         >
@@ -177,6 +181,7 @@
         </div>
         <button
           type="button"
+          class="btn-secondary"
           onclick="closePopup('drink-popup')"
           data-i18n="common.cancel"
         >
@@ -194,6 +199,7 @@
         <ul id="drink-list"></ul>
         <button
           type="button"
+          class="btn-secondary"
           onclick="closePopup('drink-list-modal')"
           data-i18n="common.close"
         >

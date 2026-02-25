@@ -104,11 +104,34 @@ function initializeEventListeners() {
             openDrinkPopup(hour);
         });
     });
+
+    // Close all popups when clicking the backdrop
+    document.getElementById('popup-backdrop')?.addEventListener('click', () => {
+        document.querySelectorAll('.popup.active').forEach(popup => {
+            popup.classList.remove('active');
+        });
+        hideBackdrop();
+    });
+}
+
+// Backdrop management
+function showBackdrop() {
+    document.getElementById('popup-backdrop')?.classList.add('active');
+}
+
+function hideBackdrop() {
+    document.getElementById('popup-backdrop')?.classList.remove('active');
 }
 
 // Generic popup close function
 function closePopup(popupId) {
-    document.getElementById(popupId)?.classList.remove('active');
+    const popup = document.getElementById(popupId);
+    if (popup) {
+        popup.classList.remove('active');
+        if (!document.querySelector('.popup.active')) {
+            hideBackdrop();
+        }
+    }
 }
 
 // Initialize app when DOM is ready
@@ -117,7 +140,7 @@ document.addEventListener('DOMContentLoaded', initializeApp);
 // Export necessary functions and objects
 export const state = AppState.getInstance();
 export const { getCookie, getLocalStorage } = storage;
-export { closePopup };
+export { closePopup, showBackdrop };
 
 // Global scope assignments for HTML event handlers
 Object.assign(window, {

@@ -1,4 +1,4 @@
-import { closePopup, getLocalStorage } from '../main.js';
+import { closePopup, getLocalStorage, showBackdrop } from '../main.js';
 import { loadDrinkOptions } from './drinkingClock.js';
 import { i18n } from '../i18n/languageManager.js';
 
@@ -50,6 +50,7 @@ export function updateUserInfoDisplay() {
 export function openUserInfoPopup() {
     const popup = document.getElementById('user-info-popup');
     popup.classList.add('active');
+    showBackdrop();
 }
 
 export function closeUserInfoPopup() {

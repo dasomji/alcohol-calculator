@@ -1,4 +1,4 @@
-import { getLocalStorage } from '../main.js';
+import { getLocalStorage, showBackdrop } from '../main.js';
 import { i18n } from '../i18n/languageManager.js';
 
 let bacChartInstance = null;
@@ -335,9 +335,14 @@ export function showMobileInfoPopup(description) {
     popupTitle.textContent = `${description.title}`;
     popupContent.innerHTML = `<p>${description.description}</p>`;
     popup.classList.add('active');
+    showBackdrop();
 }
 
 export function closeMobileInfoPopup() {
     const popup = document.getElementById('mobile-info-popup');
     popup.classList.remove('active');
+    if (!document.querySelector('.popup.active')) {
+        const backdrop = document.getElementById('popup-backdrop');
+        backdrop?.classList.remove('active');
+    }
 }

@@ -29,6 +29,7 @@ export async function initializeMenu() {
 
     menuToggle.addEventListener('click', () => {
         slideMenu.classList.toggle('active');
+        menuToggle.classList.toggle('active');
         if (!qrCodeGenerated) {
             generateQRCode();
             qrCodeGenerated = true;
@@ -39,6 +40,16 @@ export async function initializeMenu() {
     document.addEventListener('click', (event) => {
         if (!slideMenu.contains(event.target) && !menuToggle.contains(event.target)) {
             slideMenu.classList.remove('active');
+            menuToggle.classList.remove('active');
+        }
+    });
+
+    // Highlight active page in navigation
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('#slide-menu ul li a').forEach(link => {
+        const linkPage = link.getAttribute('href');
+        if (linkPage === currentPage) {
+            link.classList.add('active');
         }
     });
 
