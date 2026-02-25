@@ -2,6 +2,19 @@ import { calculateBAC, toggleChartExplainer } from './chart.js';
 import { getLocalStorage, state, closePopup, showBackdrop } from '../main.js';
 import { i18n } from '../i18n/languageManager.js';
 
+// Cached drinks.json data — loaded once, reused everywhere
+let cachedDrinkTypes = null;
+
+// Session flag for auto-scroll (resets on page load)
+let hasScrolledToChart = false;
+
+export async function getDrinkTypes() {
+    if (cachedDrinkTypes) return cachedDrinkTypes;
+    const response = await fetch('assets/drinks.json');
+    cachedDrinkTypes = await response.json();
+    return cachedDrinkTypes;
+}
+
 export function updateClockDisplay() {
     return new Promise((resolve) => {
         const clockContainer = document.getElementById('clock');
@@ -11,16 +24,14 @@ export function updateClockDisplay() {
         const existingPictograms = clockContainer.querySelectorAll('.drink-group');
         existingPictograms.forEach(pictogram => pictogram.remove());
 
-        const clockHands = clockContainer.querySelectorAll('.clock-hand');
+        const clockLabel = clockContainer.querySelector('.clock-label');
         const drinkData = localStorage.getItem('drinkData');
         if (drinkData && Object.keys(JSON.parse(drinkData)).length > 0) {
-            clockHands.forEach(h => h.classList.add('hidden-hand'));
+            if (clockLabel) clockLabel.classList.add('hidden-label');
             const data = JSON.parse(drinkData);
 
-            // Load drink data from drinks.json
-            fetch('assets/drinks.json')
-                .then(response => response.json())
-                .then(drinkTypes => {
+            // Load drink data from cached drinks.json
+            getDrinkTypes().then(drinkTypes => {
                     Object.entries(data).forEach(([hour, drinks]) => {
                         const drinkGroup = document.createElement('div');
                         drinkGroup.classList.add('drink-group');
@@ -38,7 +49,7 @@ export function updateClockDisplay() {
 
                         const angle = (parseInt(hour) - 3) * 30 * (Math.PI / 180);
                         const clockSize = clockContainer.offsetWidth;
-                        const radius = (clockSize / 2) * 1.3;
+                        const radius = (clockSize / 2) * 0.85;
                         const x = Math.cos(angle) * radius + (clockSize / 2);
                         const y = Math.sin(angle) * radius + (clockSize / 2);
 
@@ -61,7 +72,7 @@ export function updateClockDisplay() {
                     resolve();
                 });
         } else {
-            clockHands.forEach(h => h.classList.remove('hidden-hand'));
+            if (clockLabel) clockLabel.classList.remove('hidden-label');
             clearButton.style.marginTop = '0px';
             resolve();
         }
@@ -72,6 +83,10 @@ export function openDrinkPopup(hour) {
     if (state && typeof hour === 'number') {
         state.setSelectedHour(hour);
         const popup = document.getElementById('drink-popup');
+        const title = document.getElementById('drink-popup-title');
+        if (title) {
+            title.textContent = `${i18n.t('drinks.addDrink')} — ${hour}:00`;
+        }
         popup.classList.add('active');
         showBackdrop();
     } else {
@@ -91,7 +106,8 @@ export function showDrinkListModal(hour, drinks, drinkTypes) {
         const drinkType = drinkTypes.find(type => type.name === drink.drinkType);
         if (drinkType) {
             const listItem = document.createElement('li');
-            listItem.textContent = `${drinkType.name} ${drinkType.pictogram}`;
+            const translatedName = i18n.t(`drinks.${drinkType.name.toLowerCase()}`);
+            listItem.textContent = `${translatedName} ${drinkType.pictogram}`;
 
             const deleteButton = document.createElement('button');
             deleteButton.textContent = i18n.t('drinks.delete');
@@ -117,6 +133,23 @@ export async function saveDrink(hour, drinkType, percentAlcohol, quantity) {
     await updateClockDisplay();
     calculateBAC();
     toggleChartExplainer();
+    updateClearButtonVisibility();
+
+    // Auto-scroll to chart on first drink of session
+    if (!hasScrolledToChart) {
+        hasScrolledToChart = true;
+        setTimeout(() => {
+            document.getElementById('bacChart-container')?.scrollIntoView({ behavior: 'smooth' });
+        }, 300);
+    }
+}
+
+export function updateClearButtonVisibility() {
+    const clearButton = document.querySelector('.clear-button');
+    if (!clearButton) return;
+    const drinkData = localStorage.getItem('drinkData');
+    const hasDrinks = drinkData && Object.keys(JSON.parse(drinkData)).length > 0;
+    clearButton.classList.toggle('hidden-clear', !hasDrinks);
 }
 
 let clearConfirmTimeout = null;
@@ -135,6 +168,7 @@ export function clearDrinkData() {
         toggleChartExplainer();
         updateClockDisplay();
         calculateBAC();
+        updateClearButtonVisibility();
     } else {
         button.classList.add('confirming');
         button.textContent = i18n.t('clock.clearConfirm');
@@ -146,22 +180,19 @@ export function clearDrinkData() {
 }
 
 export function loadDrinkData() {
-    const drinkData = localStorage.getItem('drinkData');
-    if (drinkData) {
-        updateClockDisplay();
-    }
+    // Just validates that drink data exists in localStorage.
+    // updateClockDisplay() is called separately by initializeDrinkingClock().
+    return !!localStorage.getItem('drinkData');
 }
 
 export function selectDrink(drink) {
     const hour = state.getSelectedHour();
     saveDrink(hour, drink.name, drink.percentAlcohol, drink.volume);
-    closePopup('drink-popup');
 }
 
 export async function loadDrinkOptions() {
     try {
-        const response = await fetch('assets/drinks.json');
-        const drinks = await response.json();
+        const drinks = await getDrinkTypes();
 
         const drinkPopup = document.getElementById('drinks-container');
         drinkPopup.innerHTML = '';
@@ -226,26 +257,28 @@ export function calculateBACIncrease(drink) {
     return bacIncrease;
 }
 
-export function deleteDrink(hour, index) {
+export async function deleteDrink(hour, index) {
     let drinkData = JSON.parse(localStorage.getItem('drinkData'));
     drinkData[hour].splice(index, 1);
 
+    if (drinkData[hour].length === 0) {
+        delete drinkData[hour];
+        localStorage.setItem('drinkData', JSON.stringify(drinkData));
+        updateClockDisplay();
+        calculateBAC();
+        toggleChartExplainer();
+        updateClearButtonVisibility();
+        closePopup("drink-list-modal");
+        return;
+    }
 
     localStorage.setItem('drinkData', JSON.stringify(drinkData));
     updateClockDisplay();
     calculateBAC();
     toggleChartExplainer();
+    updateClearButtonVisibility();
 
-    if (drinkData[hour].length === 0) {
-        delete drinkData[hour];
-        closePopup("drink-list-modal");
-        return
-    }
-    // Refresh the modal
-    const drinks = drinkData[hour] || [];
-    fetch('assets/drinks.json')
-        .then(response => response.json())
-        .then(drinkTypes => {
-            showDrinkListModal(hour, drinks, drinkTypes);
-        });
+    // Refresh the modal with cached drink types
+    const drinkTypes = await getDrinkTypes();
+    showDrinkListModal(hour, drinkData[hour], drinkTypes);
 }

@@ -3,7 +3,8 @@ export default {
     menu: {
         calculator: 'Promill-Rechner',
         forTeachers: 'Für Lehrer:innen & Trainer',
-        about: 'Über'
+        about: 'Über',
+        qrLabel: 'QR-Code scannen, um die App am Handy zu öffnen'
     },
     userInfo: {
         title: 'Infos über dich',
@@ -23,12 +24,16 @@ export default {
         clickTime: 'Klicke auf eine Uhrzeit um ein Getränk hinzuzufügen.',
         clickOn: 'Klicke auf',
         anHour: 'eine Uhrzeit',
+        clickPrompt: 'Klicke auf eine Uhrzeit',
         clearDrinks: 'Drinks löschen',
         clearConfirm: 'Nochmals tippen zum Bestätigen'
     },
     chart: {
         explainer: 'Klicke auf einen Bereich in dem Diagramm um zu sehen, welche Auswirkung dieser Alkoholgehalt auf dich hat.',
-        highestBac: 'Höchster Alkoholgehalt:'
+        highestBac: 'Höchster Alkoholgehalt:',
+        alcohol: '‰ Alkohol',
+        time: 'Uhrzeit',
+        bacExplainer: 'Promille (‰) bedeutet Gramm Alkohol pro Liter Blut.'
     },
     drinks: {
         addDrink: 'Getränk hinzufügen',
@@ -45,11 +50,8 @@ export default {
         cancel: 'Abbrechen',
         close: 'Schließen'
     },
-    chart: {
-        alcohol: '‰ Alkohol',
-        time: "Uhrzeit",
-        highestBac: "Höchster Alkoholwert",
-        explainer: "Klicke auf einen Bereich in dem Diagramm um zu sehen, welche Auswirkung dieser Alkoholgehalt auf dich hat."
+    onboarding: {
+        welcome: 'Dies ist eine Simulation, um zu verstehen, wie Alkohol auf deinen Körper wirkt. Richte dein Profil ein, um loszulegen.'
     },
     teachers: {
         title: 'Bildungsarbeit mit C-alcohol',
