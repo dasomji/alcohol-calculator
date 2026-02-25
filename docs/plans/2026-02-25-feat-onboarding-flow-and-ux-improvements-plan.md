@@ -1,7 +1,7 @@
 ---
 title: "feat: Onboarding Flow & UX Improvements"
 type: feat
-status: active
+status: completed
 date: 2026-02-25
 origin: documentation/brainstorm-onboarding-ux.md
 ---
