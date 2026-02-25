@@ -1,5 +1,6 @@
 import { closePopup, getLocalStorage, showBackdrop } from '../main.js';
 import { loadDrinkOptions } from './drinkingClock.js';
+import { calculateBAC } from './chart.js';
 import { i18n } from '../i18n/languageManager.js';
 
 export function saveUserInfo() {
@@ -9,9 +10,13 @@ export function saveUserInfo() {
     const age = Number(document.getElementById('age').value);
     const userInfo = { gender, weight, height, age };
     localStorage.setItem('userData', JSON.stringify(userInfo));
+    localStorage.setItem('onboardingComplete', 'true');
+    const banner = document.getElementById('onboarding-banner');
+    if (banner) banner.classList.add('hidden');
     closePopup('user-info-popup');
     updateUserInfoDisplay();
     loadDrinkOptions();
+    calculateBAC();
 }
 
 export function loadUserData() {
@@ -57,6 +62,11 @@ export function closeUserInfoPopup() {
     const popup = document.getElementById('user-info-popup');
     popup.classList.remove('active');
 }
+
+// Update profile pill text when language changes
+document.addEventListener('languageChanged', () => {
+    updateUserInfoDisplay();
+});
 
 export function initializeSliders() {
     const sliders = ['weight', 'height', 'age'];

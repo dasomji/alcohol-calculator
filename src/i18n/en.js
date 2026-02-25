@@ -3,7 +3,8 @@ export default {
     menu: {
         calculator: 'BAC Calculator',
         forTeachers: 'For Teachers & Trainers',
-        about: 'About'
+        about: 'About',
+        qrLabel: 'Scan to open on your phone'
     },
     userInfo: {
         title: 'Your Information',
@@ -23,12 +24,16 @@ export default {
         clickTime: 'Click on a time to add a drink.',
         clickOn: 'Click on',
         anHour: 'an hour',
+        clickPrompt: 'Click on an hour',
         clearDrinks: 'Clear Drinks',
         clearConfirm: 'Tap again to confirm'
     },
     chart: {
         explainer: 'Click on an area in the chart to see how this alcohol content affects you.',
-        highestBac: 'Highest BAC:'
+        highestBac: 'Highest BAC:',
+        alcohol: '‰ blood alcohol',
+        time: 'time',
+        bacExplainer: 'Per-mille (‰) means grams of alcohol per liter of blood.'
     },
     drinks: {
         addDrink: 'Add Drink',
@@ -45,11 +50,8 @@ export default {
         cancel: 'Cancel',
         close: 'Close'
     },
-    chart: {
-        alcohol: '‰ blood alcohol',
-        time: "time",
-        highestBac: "highest BAC",
-        explainer: "Click on an area in the chart to see what effect this alcohol level has on you."
+    onboarding: {
+        welcome: 'This is a simulation to help you understand how alcohol affects your body. Set up your profile to get started.'
     },
     teachers: {
         title: "Educational Work with C-alcohol",

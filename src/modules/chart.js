@@ -1,5 +1,6 @@
 import { getLocalStorage, showBackdrop } from '../main.js';
 import { i18n } from '../i18n/languageManager.js';
+import { getDrinkTypes } from './drinkingClock.js';
 
 let bacChartInstance = null;
 let promillDescriptions = null;
@@ -252,52 +253,38 @@ export function updateBACTable(bacTable) {
     renderDrinkPictograms();
 }
 
-function renderDrinkPictograms() {
+async function renderDrinkPictograms() {
     const drinkData = localStorage.getItem('drinkData');
-    if (drinkData) {
-        const drinks = JSON.parse(drinkData);
+    if (!drinkData) return;
 
-        fetch('assets/drinks.json')
-            .then(response => response.json())
-            .then(drinkTypes => {
-                console.log('Drink types loaded:', drinkTypes);
+    const drinks = JSON.parse(drinkData);
+    const drinkTypes = await getDrinkTypes();
 
-                bacChartInstance.options.animation.onComplete = () => {
-                    const ctx = bacChartInstance.ctx;
-                    const chartArea = bacChartInstance.chartArea;
+    bacChartInstance.options.animation.onComplete = () => {
+        const ctx = bacChartInstance.ctx;
+        const chartArea = bacChartInstance.chartArea;
 
-                    Object.entries(drinks).forEach(([hour, drinkList]) => {
-                        const xPos = bacChartInstance.scales.x.getPixelForValue(hour + ':00');
-                        let yPos = chartArea.bottom;
-                        const stackOffset = 20;
+        Object.entries(drinks).forEach(([hour, drinkList]) => {
+            const xPos = bacChartInstance.scales.x.getPixelForValue(hour + ':00');
+            let yPos = chartArea.bottom;
+            const stackOffset = 20;
 
-                        if (xPos >= chartArea.left && xPos <= chartArea.right) {
-                            drinkList.forEach((drink, index) => {
-                                const drinkType = drinkTypes.find(type => type.name === drink.drinkType);
-                                if (drinkType) {
-                                    const pictogram = drinkType.pictogram;
-
-                                    ctx.save();
-                                    ctx.font = '1rem Arial';
-                                    ctx.fillStyle = 'black';
-                                    ctx.textAlign = 'center';
-                                    ctx.textBaseline = 'bottom';
-                                    ctx.fillText(pictogram, xPos, yPos - (index * stackOffset));
-                                    ctx.restore();
-                                } else {
-                                    console.log(`Drink type not found for: ${drink.drinkType}`);
-                                }
-                            });
-                        }
-                    });
-                };
-            })
-            .catch(error => {
-                console.error('Error loading drink types:', error);
-            });
-    } else {
-        console.log('No drink data found');
-    }
+            if (xPos >= chartArea.left && xPos <= chartArea.right) {
+                drinkList.forEach((drink, index) => {
+                    const drinkType = drinkTypes.find(type => type.name === drink.drinkType);
+                    if (drinkType) {
+                        ctx.save();
+                        ctx.font = '1rem Arial';
+                        ctx.fillStyle = 'black';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom';
+                        ctx.fillText(drinkType.pictogram, xPos, yPos - (index * stackOffset));
+                        ctx.restore();
+                    }
+                });
+            }
+        });
+    };
 }
 
 export function showDesktopInfo(event, description) {
@@ -316,15 +303,18 @@ export function hideDesktopInfo() {
 export function toggleChartExplainer() {
     const chartExplainer = document.getElementById('chart-explainer');
     const highestBAC = document.getElementById('highest-bac');
+    const bacExplainer = document.getElementById('bac-explainer');
     const drinkData = localStorage.getItem('drinkData');
     const drinks = drinkData ? JSON.parse(drinkData) : {};
 
     if (Object.keys(drinks).length > 0) {
         chartExplainer.classList.remove('hidden');
         highestBAC.classList.remove('hidden');
+        if (bacExplainer) bacExplainer.classList.remove('hidden');
     } else {
         chartExplainer.classList.add('hidden');
         highestBAC.classList.add('hidden');
+        if (bacExplainer) bacExplainer.classList.add('hidden');
     }
 }
 

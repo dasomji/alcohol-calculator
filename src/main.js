@@ -11,7 +11,8 @@ import {
     loadDrinkOptions,
     updateClockDisplay,
     openDrinkPopup,
-    clearDrinkData
+    clearDrinkData,
+    updateClearButtonVisibility
 } from './modules/drinkingClock.js';
 
 import {
@@ -74,10 +75,19 @@ async function initializeApp() {
         await initializeChart();
         initializeUser();
         initializeDrinkingClock();
+        checkOnboarding();
     }
 
     initializeEventListeners();
     i18n.updatePageContent();
+}
+
+function checkOnboarding() {
+    if (!localStorage.getItem('onboardingComplete')) {
+        const banner = document.getElementById('onboarding-banner');
+        if (banner) banner.classList.remove('hidden');
+        openUserInfoPopup();
+    }
 }
 
 async function initializeChart() {
@@ -95,6 +105,7 @@ function initializeDrinkingClock() {
     loadDrinkData();
     loadDrinkOptions();
     updateClockDisplay();
+    updateClearButtonVisibility();
 }
 
 function initializeEventListeners() {
@@ -103,7 +114,25 @@ function initializeEventListeners() {
             const hour = parseInt(e.target.textContent);
             openDrinkPopup(hour);
         });
+        element.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const hour = parseInt(e.target.textContent);
+                openDrinkPopup(hour);
+            }
+        });
     });
+
+    // Keyboard support for profile pill
+    const userInfo = document.getElementById('user-info');
+    if (userInfo) {
+        userInfo.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openUserInfoPopup();
+            }
+        });
+    }
 
     // Close all popups when clicking the backdrop
     document.getElementById('popup-backdrop')?.addEventListener('click', () => {

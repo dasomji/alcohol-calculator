@@ -39,11 +39,12 @@
         <!-- <li><a href="ueber.html" data-i18n="menu.about">Über</a></li> -->
       </ul>
       <div id="qrcode"></div>
+      <p class="qr-label" data-i18n="menu.qrLabel">Scan to open on your phone</p>
     </nav>
 
     <h1 data-i18n="title">Promill-Rechner</h1>
     <div id="user-info-container">
-      <div id="user-info" class="btn-primary" onclick="openUserInfoPopup()">
+      <div id="user-info" class="btn-primary" role="button" tabindex="0" onclick="openUserInfoPopup()">
         <!-- gets populated by JS -->
       </div>
       <p>
@@ -59,25 +60,19 @@
     </div>
     <div id="clock-container">
       <div id="clock">
-        <div class="clock-number">1</div>
-        <div class="clock-number">2</div>
-        <div class="clock-number">3</div>
-        <div class="clock-number">4</div>
-        <div class="clock-number">5</div>
-        <div class="clock-number">18</div>
-        <div class="clock-number">19</div>
-        <div class="clock-number">20</div>
-        <div class="clock-number">21</div>
-        <div class="clock-number">22</div>
-        <div class="clock-number">23</div>
-        <div class="clock-number">0</div>
-        <div class="clock-hand left-hand" data-i18n="clock.clickOn">
-          Click on
-        </div>
-        <div class="clock-hand right-hand" data-i18n="clock.anHour">
-          an hour
-        </div>
-        <div class="clock-hand middle-dot"></div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 1:00">1</div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 2:00">2</div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 3:00">3</div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 4:00">4</div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 5:00">5</div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 18:00">18</div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 19:00">19</div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 20:00">20</div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 21:00">21</div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 22:00">22</div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 23:00">23</div>
+        <div class="clock-number" role="button" tabindex="0" aria-label="Add drink at 0:00">0</div>
+        <div class="clock-label" data-i18n="clock.clickPrompt">Click on an hour</div>
       </div>
     </div>
     <button
@@ -95,6 +90,9 @@
       <span data-i18n="chart.highestBac">Höchster Alkoholgehalt:</span>
       <span id="highest-bac-value"></span>‰
     </p>
+    <p id="bac-explainer" class="hidden bac-explainer" data-i18n="chart.bacExplainer">
+      Per-mille (‰) means grams of alcohol per liter of blood.
+    </p>
     <div id="bacChart-container">
       <canvas id="bacChart"></canvas>
     </div>
@@ -104,6 +102,9 @@
 
     <!-- Popups -->
     <div id="user-info-popup" class="popup">
+      <div id="onboarding-banner" class="onboarding-banner hidden">
+        <p data-i18n="onboarding.welcome">This is a simulation to help you understand how alcohol affects your body. Set up your profile to get started.</p>
+      </div>
       <h2 data-i18n="userInfo.title">Infos über dich</h2>
       <p data-i18n="userInfo.description">
         Wie betrunken du wirst, hängt von folgenden Faktoren ab:
@@ -152,7 +153,7 @@
             <input
               type="range"
               id="age-slider"
-              min="18"
+              min="10"
               max="100"
               step="1"
               value="30"
@@ -175,7 +176,7 @@
 
     <div id="drink-popup" class="popup">
       <div id="drink-popup-content">
-        <h2 data-i18n="drinks.addDrink">Getränk hinzufügen</h2>
+        <h2 id="drink-popup-title">Getränk hinzufügen</h2>
         <div id="drinks-container">
           <!-- Drink options will be dynamically loaded here -->
         </div>
