@@ -17,21 +17,24 @@ export async function getDrinkTypes() {
 
 export function updateClockDisplay() {
     return new Promise((resolve) => {
-        const clockContainer = document.getElementById('clock');
-        const clearButton = document.querySelector('.clear-button');
+        requestAnimationFrame(() => {
+            const clockEl = document.getElementById('clock');
+            const clearButton = document.querySelector('.clear-button');
 
-        // Clear existing pictograms
-        const existingPictograms = clockContainer.querySelectorAll('.drink-group');
-        existingPictograms.forEach(pictogram => pictogram.remove());
+            // Clear existing drink groups
+            clockEl.querySelectorAll('.drink-group').forEach(el => el.remove());
 
-        const clockLabel = clockContainer.querySelector('.clock-label');
-        const drinkData = localStorage.getItem('drinkData');
-        if (drinkData && Object.keys(JSON.parse(drinkData)).length > 0) {
-            if (clockLabel) clockLabel.classList.add('hidden-label');
-            const data = JSON.parse(drinkData);
+            const clockLabel = clockEl.querySelector('.clock-label');
+            const drinkData = localStorage.getItem('drinkData');
+            if (drinkData && Object.keys(JSON.parse(drinkData)).length > 0) {
+                if (clockLabel) clockLabel.classList.add('hidden-label');
+                const data = JSON.parse(drinkData);
 
-            // Load drink data from cached drinks.json
-            getDrinkTypes().then(drinkTypes => {
+                getDrinkTypes().then(drinkTypes => {
+                    const clockRect = clockEl.getBoundingClientRect();
+                    const clockCenterX = clockRect.width / 2;
+                    const clockCenterY = clockRect.height / 2;
+
                     Object.entries(data).forEach(([hour, drinks]) => {
                         const drinkGroup = document.createElement('div');
                         drinkGroup.classList.add('drink-group');
@@ -47,35 +50,41 @@ export function updateClockDisplay() {
                             }
                         });
 
-                        const angle = (parseInt(hour) - 3) * 30 * (Math.PI / 180);
-                        const clockSize = clockContainer.offsetWidth;
-                        const radius = (clockSize / 2) * 0.85;
-                        const x = Math.cos(angle) * radius + (clockSize / 2);
-                        const y = Math.sin(angle) * radius + (clockSize / 2);
+                        // Find the matching clock number element and read its position
+                        const numberEl = clockEl.querySelector(`.clock-number[data-hour="${hour}"]`);
+                        if (numberEl) {
+                            const numberRect = numberEl.getBoundingClientRect();
+                            const numberCenterX = numberRect.left + numberRect.width / 2 - clockRect.left;
+                            const numberCenterY = numberRect.top + numberRect.height / 2 - clockRect.top;
 
-                        drinkGroup.style.left = `${x}px`;
-                        drinkGroup.style.top = `${y}px`;
-                        drinkGroup.style.transform = 'translate(-50%, -50%)';
+                            // Compute direction from clock center to number center
+                            const dx = numberCenterX - clockCenterX;
+                            const dy = numberCenterY - clockCenterY;
 
-                        clockContainer.appendChild(drinkGroup);
+                            // Place drink group clearly outside the clock
+                            const radiusMultiplier = 1.7;
+                            const x = clockCenterX + dx * radiusMultiplier;
+                            const y = clockCenterY + dy * radiusMultiplier;
+
+                            drinkGroup.style.left = `${x}px`;
+                            drinkGroup.style.top = `${y}px`;
+                            drinkGroup.style.transform = 'translate(-50%, -50%)';
+                        }
+
+                        clockEl.appendChild(drinkGroup);
                     });
 
-                    // Adjust the margin of the clear button
-                    const maxBottom = Math.max(...Array.from(clockContainer.querySelectorAll('.drink-group')).map(el => el.offsetTop + el.offsetHeight));
-                    const extraMargin = Math.max(0, maxBottom - clockContainer.offsetHeight);
-                    clearButton.style.marginTop = `${extraMargin}px`;
-
                     resolve();
-                })
-                .catch(error => {
+                }).catch(error => {
                     console.error('Error loading drink types:', error);
                     resolve();
                 });
-        } else {
-            if (clockLabel) clockLabel.classList.remove('hidden-label');
-            clearButton.style.marginTop = '0px';
-            resolve();
-        }
+            } else {
+                if (clockLabel) clockLabel.classList.remove('hidden-label');
+                clearButton.style.marginTop = '0px';
+                resolve();
+            }
+        });
     });
 }
 

@@ -111,13 +111,13 @@ function initializeDrinkingClock() {
 function initializeEventListeners() {
     document.querySelectorAll('.clock-number').forEach(element => {
         element.addEventListener('click', (e) => {
-            const hour = parseInt(e.target.textContent);
+            const hour = parseInt(e.target.dataset.hour);
             openDrinkPopup(hour);
         });
         element.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                const hour = parseInt(e.target.textContent);
+                const hour = parseInt(e.target.dataset.hour);
                 openDrinkPopup(hour);
             }
         });
@@ -162,6 +162,17 @@ function closePopup(popupId) {
         }
     }
 }
+
+// Reposition drinks on resize so they stay aligned with clock numbers
+let resizeTimeout = null;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        if (document.getElementById('clock-container')) {
+            updateClockDisplay();
+        }
+    }, 250);
+});
 
 // Initialize app when DOM is ready
 document.addEventListener('DOMContentLoaded', initializeApp);
