@@ -100,6 +100,12 @@ Navigate to the directory and double-click the index.html file to open it in you
 ## Deployment
 To deploy the app, just put it on your server or deploy on a service like vercel/Railway through auto-deploy by linking to the repository on Github/Gitlab. You do not need to set up a database since all data is stored in the browser's local storage.
 
+### Coolify
+This repository now includes a `Dockerfile` for static deployment with `nginx`.
+
+In Coolify, use the `Dockerfile` build pack with the base directory set to `/`.
+If you keep using `Nixpacks`, Coolify may try to publish `/app/dist`, but this project does not generate a `dist` folder because the static files already live in the repository root.
+
 
 ## Roadmap:
 
